@@ -9,15 +9,16 @@ import {
   InputField,
   Button,
   ButtonText,
-  Image,
   InputSlot,
-  InputIcon,
+  InputIcon
 } from "@gluestack-ui/themed";
 import React from "react";
 import { config } from "../../../../config/gluestack-ui.config";
 import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import logo from "/public/loginpc.jpg"
 
 const Loginpage = () => {
   const router = useRouter();
@@ -113,7 +114,6 @@ const Loginpage = () => {
                           </InputSlot>
                         </Input>
                       </VStack>
-
                       <Button
                         size="md"
                         variant="solid"
@@ -128,11 +128,7 @@ const Loginpage = () => {
                 </Box>
               </Box>
               <Box bg="$white" h="100%" width="50%">
-                {/* <Image
-                  source={{
-                    uri: "../../../../assets/login.jpg",
-                  }}
-                /> */}
+                <Image src={logo} alt="pc" fill objectFit="contain" />
               </Box>
             </HStack>
           </Box>

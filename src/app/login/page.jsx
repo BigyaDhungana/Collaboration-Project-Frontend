@@ -13,8 +13,6 @@ export default function Login() {
   if (!isMounted) return null;
 
   return (
-    <>
       <Loginpage/>
-    </>
   );
 }
