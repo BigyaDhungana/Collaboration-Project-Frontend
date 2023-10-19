@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Loginpage from "./components/LoginPage"
+import Loginpage from "./components/LoginPage";
 
 export default function Login() {
   const [isMounted, setIsMounted] = useState(false);
@@ -12,7 +12,5 @@ export default function Login() {
 
   if (!isMounted) return null;
 
-  return (
-      <Loginpage/>
-  );
+  return <Loginpage />;
 }
