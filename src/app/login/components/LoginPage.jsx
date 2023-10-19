@@ -10,19 +10,20 @@ import {
   Button,
   ButtonText,
   InputSlot,
-  InputIcon
+  InputIcon,
 } from "@gluestack-ui/themed";
 import React from "react";
 import { config } from "../../../../config/gluestack-ui.config";
 import { useState } from "react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logo from "/public/loginpc.jpg"
+import logo from "/public/loginpc.jpg";
 
 const Loginpage = () => {
   const router = useRouter();
 
+  //eye eycon haha
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordState = () => {
     setShowPassword((showState) => {
@@ -35,7 +36,7 @@ const Loginpage = () => {
 
   const handleAuth = () => {
     if (email === "bigya" && password === "123") {
-      router.push("/");
+      router.push("/maindash");
     } else {
       alert("Wrong email or password");
       setEmail("");
@@ -108,9 +109,14 @@ const Loginpage = () => {
                             value={password ? password : ""}
                           />
                           <InputSlot onPress={handlePasswordState}>
-                            <InputIcon
+                            {/* <InputIcon
                               as={showPassword ? AiFillEye : AiFillEyeInvisible}
-                            />
+                            /> */}
+                            {showPassword ? (
+                              <AiOutlineEye />
+                            ) : (
+                              <AiOutlineEyeInvisible />
+                            )}
                           </InputSlot>
                         </Input>
                       </VStack>

@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import Loginpage from "./components/LoginPage";
 
 export default function Login() {
-  const [isMounted, setIsMounted] = useState(false);
 
+  //prevent ssr hydration error
+  const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);

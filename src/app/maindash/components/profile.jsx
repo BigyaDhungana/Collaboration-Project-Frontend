@@ -27,7 +27,6 @@ import {
   AlertDialogFooter,
 } from "@gluestack-ui/themed";
 import { config } from "../../../../config/gluestack-ui.config";
-import Link from "next/link";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -68,6 +67,7 @@ const Profile = () => {
         </VStack>
 
         <Menu
+          offset={10}
           onOpen={() => {
             setProfileClicked(!profileClicked);
           }}
@@ -75,12 +75,19 @@ const Profile = () => {
             setProfileClicked(!profileClicked);
           }}
           placement="bottom end"
+          selectionMode="single"
+          onSelectionChange={(e) => {
+            if (e.currentKey === "Your Information") {
+              setShowInfo(true);
+            }
+            if (e.currentKey === "Logout") {
+              setShowLogoutAlert(true);
+            }
+          }}
           trigger={({ ...triggerProps }) => {
             return (
-              <Button {...triggerProps} variant="solid" action="primary">
-                <ButtonIcon
-                  as={profileClicked ? AiFillCaretUp : AiFillCaretDown}
-                ></ButtonIcon>
+              <Button {...triggerProps} variant="link" action="secondary">
+                {profileClicked ? <AiFillCaretUp /> : <AiFillCaretDown />}
               </Button>
             );
           }}

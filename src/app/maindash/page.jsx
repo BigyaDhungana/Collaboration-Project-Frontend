@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Navbar from "./components/navbar";
+import Headerbar from "./components/header";
 
 const Dashboard = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -16,9 +16,7 @@ const Dashboard = () => {
   }
 
   return (
-    <>
-      <Navbar />
-    </>
+      <Headerbar />
   );
 };
 
