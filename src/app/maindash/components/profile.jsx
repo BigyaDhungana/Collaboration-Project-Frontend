@@ -30,6 +30,8 @@ import { config } from "../../../../config/gluestack-ui.config";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+//dummy
+import { dummyinfo } from "../../testdata/data";
 
 const Profile = () => {
   const [profileClicked, setProfileClicked] = useState(false);
@@ -37,19 +39,9 @@ const Profile = () => {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const route = useRouter();
 
-  const dummyinfo = {
-    name: "Bigya Dhungana",
-    role: "Project Manager",
-    created: "2023/02/02",
-  };
-
   const handleLogout = () => {
     route.push("/login");
   };
-
-  // const test = () => {
-  //   console.log("kl");
-  // };
 
   return (
     <GluestackUIProvider config={config}>
