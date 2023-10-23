@@ -1,0 +1,18 @@
+ul{
+    list-style-type: none;
+    padding:0;
+    margin:0;
+}
+
+li{
+    padding: 10px;
+    border:1px solid black;
+}
+
+li:hover{
+    background-color: aqua;
+}
+
+select{
+    border:none;
+}
