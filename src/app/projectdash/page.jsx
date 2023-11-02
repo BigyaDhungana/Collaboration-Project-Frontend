@@ -37,7 +37,7 @@ const ProjectDash = () => {
   selected team name=${sTeamName}`);
 
   return (
-    <GluestackUIProvider config={config}>
+    <>
       <VStack space="4xl" pl="3px">
         <Headerbar />
         <HStack space="4xl">
@@ -54,7 +54,7 @@ const ProjectDash = () => {
           </VStack>
         </HStack>
       </VStack>
-    </GluestackUIProvider>
+    </>
   );
 };
 
