@@ -38,7 +38,7 @@ const ProjectDash = () => {
 
   return (
     <GluestackUIProvider config={config}>
-      <VStack space="4xl">
+      <VStack space="4xl" pl="3px">
         <Headerbar />
         <HStack space="4xl">
           <VNavbar />
