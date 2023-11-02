@@ -19,13 +19,7 @@ import {
 } from "@gluestack-ui/themed";
 import { useState } from "react";
 
-const Scrollable = ({
-  title,
-  list,
-  task = false,
-  sWidth = "61.25rem",
-  route = "none",
-}) => {
+const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   const router = useRouter();
 
   const [showNews, setShowNews] = useState(false);
@@ -57,28 +51,21 @@ const Scrollable = ({
         <Center>
           <Heading mb="5px">{title}</Heading>
         </Center>
+
         <ScrollView h="220px" w={sWidth}>
           {list.map((element, index) => {
-            if (task) {
-              return (
-                <Center key={index}>
-                  <Text>{element}</Text>
-                </Center>
-              );
-            } else {
-              return (
-                <Button
-                  mb="2px"
-                  key={index}
-                  variant="link"
-                  onPress={() => {
-                    handleButton(element);
-                  }}
-                >
-                  <ButtonText> {element}</ButtonText>
-                </Button>
-              );
-            }
+            return (
+              <Button
+                mb="2px"
+                key={index}
+                variant="link"
+                onPress={() => {
+                  handleButton(element);
+                }}
+              >
+                <ButtonText> {element}</ButtonText>
+              </Button>
+            );
           })}
         </ScrollView>
       </Box>

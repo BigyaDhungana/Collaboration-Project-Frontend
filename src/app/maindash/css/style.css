@@ -1,0 +1,19 @@
+table{
+    width:100%
+}
+
+.tname{
+    width: 40%;
+}
+
+.project{
+    width:40%
+}
+
+.status{
+    width: 20%;
+}
+
+td{
+    text-align: center;
+}

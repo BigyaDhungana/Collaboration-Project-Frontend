@@ -4,6 +4,7 @@ import { Heading, Center, VStack, HStack, Box } from "@gluestack-ui/themed";
 import React, { useEffect, useState } from "react";
 import Headerbar from "./components/header";
 import Scrollable from "./components/scrollable";
+import Stable from "./components/scrolltable";
 //dummy
 import { news, tasks, dummyinfo, yourProjects } from "../testdata/data";
 
@@ -34,9 +35,10 @@ const Dashboard = () => {
         />
         <VStack>
           <Scrollable title="News and Notices" list={news} />
-          <Scrollable title="Your Tasks" list={tasks} task={true} />
+          <Stable list={tasks} ></Stable>
         </VStack>
       </HStack>
+  
     </>
   );
 };
