@@ -11,7 +11,13 @@ import {
   LinkText,
   Button,
   ButtonText,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@gluestack-ui/themed";
+import { useState } from "react";
 
 const Scrollable = ({
   title,
@@ -22,6 +28,9 @@ const Scrollable = ({
 }) => {
   const router = useRouter();
 
+  const [showNews, setShowNews] = useState(false);
+  const [news, setNews] = useState({ title: "", content: "" });
+
   const queryParamGenerator = (key, value) => {
     const params = new URLSearchParams();
     params.set(key, value);
@@ -29,11 +38,16 @@ const Scrollable = ({
   };
 
   const handleButton = (elementName) => {
-    if (route!="none"){
+    if (route != "none") {
       router.push(route + "?" + queryParamGenerator("pname", elementName));
-    }
-    else {
-      console.log(`not defined for news and notices btw ${elementName}`)
+    } else {
+      console.log(`not defined for news and notices btw ${elementName}`);
+      setShowNews(true);
+      setNews({
+        title: elementName,
+        content:
+          "naam bataiya :Bhupendra Jogi jdsklajfkldsjafkljdsklfjsdkaljfkldsajfkljdsklfjasdkljfkldsjfkljasdklfjsdkljfklajsdfkljadsfkljsdklajfklsdjafkljsdkljfkldsjafkljdsakljflkdsajfkljasdlkfjldksjfkljsdklfjsdkljflkjdsfjksdljflkdsjfkjsdkljfklsdjfkldsjflkjdsfljdslkfjdklsjfkldsjflkjsdlkfjdsljfl khass ma yo fetch garnu parne ho\nkl;sakdl;skadl",
+      });
     }
   };
 
@@ -68,6 +82,34 @@ const Scrollable = ({
           })}
         </ScrollView>
       </Box>
+
+      {/* news model */}
+
+      <Modal isOpen={showNews} onClose={() => setShowNews(false)} size="lg">
+        <ModalContent>
+          <Center>
+            <ModalHeader>
+              <Heading>{news.title}</Heading>
+            </ModalHeader>
+          </Center>
+          <ModalBody>
+            <Text>{news.content}</Text>
+          </ModalBody>
+          <Center>
+            <ModalFooter>
+              <Button
+                variant="solid"
+                action="negative"
+                onPress={() => {
+                  setShowNews(false);
+                }}
+              >
+                <ButtonText>Close</ButtonText>
+              </Button>
+            </ModalFooter>
+          </Center>
+        </ModalContent>
+      </Modal>
     </GluestackUIProvider>
   );
 };
