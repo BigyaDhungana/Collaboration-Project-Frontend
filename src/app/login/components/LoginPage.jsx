@@ -11,6 +11,13 @@ import {
   ButtonText,
   InputSlot,
   InputIcon,
+  Divider,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Center,
 } from "@gluestack-ui/themed";
 import React from "react";
 import { config } from "../../../../config/gluestack-ui.config";
@@ -33,6 +40,14 @@ const Loginpage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signupInfo, setSignupinfo] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    username: "",
+    password: "",
+  });
+  const [showSignup, setShowSignup] = useState(false);
 
   const handleAuth = () => {
     if (email === "bigya" && password === "123") {
@@ -42,6 +57,22 @@ const Loginpage = () => {
       setEmail("");
       setPassword("");
       return;
+    }
+  };
+
+  const handleSignup = () => {
+    if (
+      signupInfo.fname == "" ||
+      signupInfo.lname == "" ||
+      signupInfo.email == "" ||
+      signupInfo.username == "" ||
+      signupInfo.password == ""
+    ) {
+      alert("fill all the field");
+    } else {
+      alert("Sign up Complete");
+      console.log(signupInfo);
+      setShowSignup(false);
     }
   };
 
@@ -109,9 +140,6 @@ const Loginpage = () => {
                             value={password ? password : ""}
                           />
                           <InputSlot onPress={handlePasswordState}>
-                            {/* <InputIcon
-                              as={showPassword ? AiFillEye : AiFillEyeInvisible}
-                            /> */}
                             {showPassword ? (
                               <AiOutlineEye />
                             ) : (
@@ -129,6 +157,16 @@ const Loginpage = () => {
                       >
                         <ButtonText>Login </ButtonText>
                       </Button>
+                      <Divider />
+                      <Button
+                        size="md"
+                        varient="solid"
+                        action="positive"
+                        textAlign="center"
+                        onPress={() => setShowSignup(true)}
+                      >
+                        <ButtonText>Sign Up</ButtonText>
+                      </Button>
                     </VStack>
                   </Box>
                 </Box>
@@ -139,6 +177,148 @@ const Loginpage = () => {
             </HStack>
           </Box>
         </Box>
+
+        <Modal
+          isOpen={showSignup}
+          onClose={() => setShowSignup(false)}
+          size="lg"
+        >
+          <ModalContent>
+            <Center>
+              <ModalHeader>
+                <Heading>Sign Up</Heading>
+              </ModalHeader>
+            </Center>
+            <Divider m="15px"></Divider>
+            <ModalBody>
+              <VStack space="md">
+                <HStack space="xl">
+                  <Input
+                    variant="outline"
+                    size="md"
+                    isDisabled={false}
+                    isInvalid={false}
+                    isReadOnly={false}
+                  >
+                    <InputField
+                      placeholder="First name"
+                      type="text"
+                      onChange={(e) =>
+                        setSignupinfo({ ...signupInfo, fname: e.target.value })
+                      }
+                    />
+                  </Input>
+                  <Input
+                    variant="outline"
+                    size="md"
+                    isDisabled={false}
+                    isInvalid={false}
+                    isReadOnly={false}
+                  >
+                    <InputField
+                      placeholder="Last name"
+                      type="text"
+                      onChange={(e) =>
+                        setSignupinfo({ ...signupInfo, lname: e.target.value })
+                      }
+                    />
+                  </Input>
+                </HStack>
+
+                <Input
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                >
+                  <InputField
+                    placeholder="Email"
+                    type="text"
+                    onChange={(e) =>
+                      setSignupinfo({ ...signupInfo, email: e.target.value })
+                    }
+                  />
+                </Input>
+
+                <HStack space="xl">
+                  <Input
+                    variant="outline"
+                    size="md"
+                    isDisabled={false}
+                    isInvalid={false}
+                    isReadOnly={false}
+                  >
+                    <InputField
+                      placeholder="Username"
+                      type="text"
+                      onChange={(e) =>
+                        setSignupinfo({
+                          ...signupInfo,
+                          username: e.target.value,
+                        })
+                      }
+                    />
+                  </Input>
+                  <Input
+                    variant="outline"
+                    size="md"
+                    isDisabled={false}
+                    isInvalid={false}
+                    isReadOnly={false}
+                  >
+                    <InputField
+                      placeholder="Password"
+                      type={showPassword ? "text" : "password"}
+                      onChange={(e) =>
+                        setSignupinfo({
+                          ...signupInfo,
+                          password: e.target.value,
+                        })
+                      }
+                    />
+                    <InputSlot onPress={handlePasswordState}>
+                      {showPassword ? (
+                        <AiOutlineEye />
+                      ) : (
+                        <AiOutlineEyeInvisible />
+                      )}
+                    </InputSlot>
+                  </Input>
+                </HStack>
+                <Text size="2xs">
+                  By clicking Sign Up, you agree to our Terms, Privacy Policy
+                  and Cookies Policy.
+                </Text>
+              </VStack>
+            </ModalBody>
+
+            <ModalFooter>
+              <VStack>
+                <HStack space="3xl">
+                  <Button
+                    size="md"
+                    varient="solid"
+                    action="negative"
+                    textAlign="center"
+                    onPress={() => setShowSignup(false)}
+                  >
+                    <ButtonText>Cancel</ButtonText>
+                  </Button>
+                  <Button
+                    size="md"
+                    varient="solid"
+                    action="positive"
+                    textAlign="center"
+                    onPress={handleSignup}
+                  >
+                    <ButtonText>Sign Up</ButtonText>
+                  </Button>
+                </HStack>
+              </VStack>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </GluestackUIProvider>
     </>
   );
