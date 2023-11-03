@@ -28,6 +28,7 @@ const ProjectDash = () => {
   }, []);
   if (!isMounted) return;
 
+  //get data form component
   const getProjTeamdata = (projname, teamname) => {
     setSprojectName(projname);
     setSteamName(teamname);

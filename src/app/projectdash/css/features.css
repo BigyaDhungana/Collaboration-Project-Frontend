@@ -1,0 +1,13 @@
+.selectlist{
+    font-size: 20px;
+    margin-top: 3px;
+}
+
+.newslink{
+    text-decoration: none;
+    color: rgb(8, 69, 130);
+}
+
+.newslink:hover{
+    text-decoration: underline;
+}

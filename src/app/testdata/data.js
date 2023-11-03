@@ -89,3 +89,16 @@ export const todos = [
   "Research vacation destinations for the upcoming trip",
   "Organize the closet and donate unused clothes",
 ];
+
+export const documents = [
+  { key: 1, title: "Introduction to JavaScript Programming" },
+  { key: 2, title: "Web Development Best Practices" },
+  { key: 3, title: "Data Structures and Algorithms in Python" },
+  { key: 4, title: "Artificial Intelligence and Machine Learning" },
+  { key: 5, title: "Project Management Guidelines" },
+  { key: 6, title: "History of Ancient Civilizations" },
+  { key: 7, title: "Financial Management Strategies" },
+  { key: 8, title: "Cooking Recipes Collection" },
+  { key: 9, title: "Travel Destinations Guide" },
+  { key: 10, title: "Environmental Sustainability Initiatives" },
+];

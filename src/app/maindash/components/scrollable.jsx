@@ -18,6 +18,7 @@ import {
   ModalFooter,
 } from "@gluestack-ui/themed";
 import { useState } from "react";
+import {queryParamGenerator} from "../../../utils/querypara"
 
 const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   const router = useRouter();
@@ -25,11 +26,11 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   const [showNews, setShowNews] = useState(false);
   const [news, setNews] = useState({ title: "", content: "" });
 
-  const queryParamGenerator = (key, value) => {
-    const params = new URLSearchParams();
-    params.set(key, value);
-    return params.toString();
-  };
+  // const queryParamGenerator = (key, value) => {
+  //   const params = new URLSearchParams();
+  //   params.set(key, value);
+  //   return params.toString();
+  // };
 
   const handleButton = (elementName) => {
     if (route != "none") {

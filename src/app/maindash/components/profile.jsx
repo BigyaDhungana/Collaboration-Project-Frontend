@@ -40,7 +40,7 @@ const Profile = () => {
   const route = useRouter();
 
   const handleLogout = () => {
-    route.push("/login");
+    route.push("/");
   };
 
   return (

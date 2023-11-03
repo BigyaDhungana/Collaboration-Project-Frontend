@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import VNavbar from "../../components/vNavbar";
 import Headerbar from "../../../maindash/components/header";
-import "../../css/addtask.css";
+import "../../css/features.css";
 import {
   Box,
   Center,
