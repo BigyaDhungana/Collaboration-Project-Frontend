@@ -1,13 +1,21 @@
-.selectlist{
-    font-size: 20px;
-    margin-top: 3px;
+.selectlist {
+  font-size: 20px;
+  margin-top: 3px;
 }
 
-.newslink{
-    text-decoration: none;
-    color: rgb(8, 69, 130);
+.tiptap {
+  padding: 10px;
+  background-color: black;
+  color: white;
 }
 
-.newslink:hover{
-    text-decoration: underline;
+.tiptap:focus {
+  outline-style: none;
+  box-shadow: none;
+  border-color: transparent;
 }
+/* background-color: black;
+  color: white;
+} */
+
+

@@ -1,25 +1,19 @@
-
-
-li:hover{
-    background-color: aqua;
+select {
+  border: none;
 }
 
-select{
-    border:none;
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 20px;
+  border-bottom: 0.5px solid black;
 }
 
-.link{
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    padding: 20px;
-    border-bottom: 0.5px solid black;
+.link:hover {
+  background-color: aqua;
 }
 
-.link:hover{
-    background-color: aqua;
-}
-
-.active{
-    background-color: aqua;
+.active {
+  background-color: aqua;
 }

@@ -40,6 +40,10 @@ const Documentation = () => {
     );
   };
 
+  const handleCreateDoc=()=>{
+    router.push("/projectdash/documentation/createdoc");
+  }
+
   return (
     <Box w="80%">
       <Box borderWidth="0.5px" width="100%" p="10px" m="10px">
@@ -57,7 +61,7 @@ const Documentation = () => {
         </ScrollView>
       </Box>
       <Center>
-        <Button width="200px">
+        <Button width="200px" onPress={handleCreateDoc}>
           <ButtonText>Create Document</ButtonText>
         </Button>
       </Center>

@@ -13,6 +13,9 @@
     "@gluestack-ui/config": "^1.0.3",
     "@gluestack-ui/themed": "^1.0.10",
     "@gluestack/ui-next-adapter": "^2.1.10",
+    "@tiptap/pm": "^2.1.12",
+    "@tiptap/react": "^2.1.12",
+    "@tiptap/starter-kit": "^2.1.12",
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.2",
     "next": "13.5.2",
@@ -22,6 +25,7 @@
     "react-markdown": "^9.0.0",
     "react-native-svg": "^13.4.0",
     "react-native-web": "^0.19.9",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "tiptap-markdown": "^0.8.3"
   }
 }

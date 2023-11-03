@@ -7,6 +7,7 @@ import {
   ScrollView,
   Button,
   ButtonText,
+  Divider,
 } from "@gluestack-ui/themed";
 import { useSearchParams } from "next/navigation";
 import Markdown from "react-markdown";
@@ -18,20 +19,18 @@ const Viewdoc = () => {
   const docName = searchParam.get("dtitle");
   const route = useRouter();
   const markdown = `
-  # title
-  ## subtitile
-  A paragraph with *emphasis* and **strong importance**.
+ # heading 
 
-> A block quote with ~strikethrough~ and a URL: https://reactjs.org.
+## sub
 
-* Lists
-* [ ] todo
-* [x] done
+- one
+- teo
 
-A table:
+  *hello*
 
-| a | b |
-| - | - |
+  ## jkdfl
+
+  **jkfd**
 `;
 
     const handdleGoBack=()=>{
@@ -44,6 +43,7 @@ A table:
         <Center>
           <Heading>{docName}</Heading>
         </Center>
+        <Divider></Divider>
         <ScrollView h="430px" m="10px">
           <Markdown remarkPlugins={[remarkGfm]}>{markdown}</Markdown>
         </ScrollView>
