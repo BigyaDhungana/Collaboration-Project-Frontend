@@ -114,7 +114,7 @@ const Loginpage = () => {
                       pl="auto"
                     >
                       <VStack>
-                        <Text bold={true}>Email</Text>
+                        <Text bold={true}>Username</Text>
                         <Input
                           variant="outline"
                           size="md"
@@ -123,7 +123,7 @@ const Loginpage = () => {
                           isReadOnly={false}
                         >
                           <InputField
-                            placeholder="Type your email"
+                            placeholder="Enter your username"
                             type="text"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email ? email : ""}

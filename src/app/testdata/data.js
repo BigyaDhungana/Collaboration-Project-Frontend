@@ -102,3 +102,32 @@ export const documents = [
   { key: 9, title: "Travel Destinations Guide" },
   { key: 10, title: "Environmental Sustainability Initiatives" },
 ];
+
+export const nws = [
+  {
+    id: "1",
+    project: "Eco-Friendly Product Development",
+    news: "New Study Shows Benefits of Daily Exercise",
+  },
+  {
+    id: "2",
+    project: "Market Expansion Strategy",
+    news: "Economic Recovery Predicted for the Coming Year ",
+  },
+  {
+    id: "3",
+    project: "Website Redesign and Optimization",
+    news: "Global Leaders Convene for Climate Summit",
+  },
+  {
+    id: "4",
+    project: "Customer Loyalty Program Launch",
+    news: "Tech Company Unveils Groundbreaking Innovation",
+  },
+  {
+    id: "5",
+    project: "Mobile App Development for Healthcare",
+    news: "Government Announces New Tax Policy",
+  },
+];
+

@@ -6,7 +6,7 @@ import Headerbar from "./components/header";
 import Scrollable from "./components/scrollable";
 import Stable from "./components/scrolltable";
 //dummy
-import { news, tasks, dummyinfo, yourProjects } from "../testdata/data";
+import { news, tasks, dummyinfo, yourProjects,nws } from "../testdata/data";
 
 const Dashboard = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -34,7 +34,7 @@ const Dashboard = () => {
           route="/projectdash"
         />
         <VStack>
-          <Scrollable title="News and Notices" list={news} />
+          <Scrollable title="News and Notices" list={nws} />
           <Stable list={tasks} ></Stable>
         </VStack>
       </HStack>

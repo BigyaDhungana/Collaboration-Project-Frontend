@@ -13,17 +13,18 @@ import {
   ScrollView,
   Button,
   ButtonText,
+  Text,
 } from "@gluestack-ui/themed";
 import "../../css/features.css";
 import { useRouter } from "next/navigation";
 import { documents } from "../../../testdata/data";
+import { queryParamGenerator } from "../../../../utils/querypara";
 
 //test
-import {queryParamGenerator} from "../../../../utils/querypara"
+const projList = ["ine", "teo", "three", "four", "five"];
 
 const Documentation = () => {
-
-  const router=useRouter()
+  const router = useRouter();
 
   //prevent ssr
   const [isMounted, setIsMounted] = useState(false);
@@ -40,20 +41,51 @@ const Documentation = () => {
     );
   };
 
-  const handleCreateDoc=()=>{
+  const handleCreateDoc = () => {
     router.push("/projectdash/documentation/createdoc");
+  };
+
+  const handleProjectSelection=(e)=>{
+    console.log(e.target.value)
   }
 
   return (
     <Box w="80%">
+      <Center>
+        <Heading>Documentations</Heading>
+      </Center>
       <Box borderWidth="0.5px" width="100%" p="10px" m="10px">
-        <Center>
-          <Heading>Documentations</Heading>
-        </Center>
+        <HStack space="sm">
+          <Text bold>Project Name</Text>
+          <select
+            name="selectProjectName"
+            id="pname"
+            defaultValue="none"
+            onChange={handleProjectSelection}
+          >
+            <option value="none" disabled hidden>
+              Select a project
+            </option>
+            {projList.map((element, index) => {
+              return (
+                <option value={element} key={index}>
+                  {element}
+                </option>
+              );
+            })}
+          </select>
+        </HStack>
+
         <ScrollView h="430px" m="10px">
           {documents.map((obj) => {
             return (
-              <Button key={obj.key} variant="link" onPress={()=>{handleDocsNav(obj.title);}}>
+              <Button
+                key={obj.key}
+                variant="link"
+                onPress={() => {
+                  handleDocsNav(obj.title);
+                }}
+              >
                 <ButtonText>{obj.title}</ButtonText>
               </Button>
             );

@@ -16,9 +16,10 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  HStack,
 } from "@gluestack-ui/themed";
 import { useState } from "react";
-import {queryParamGenerator} from "../../../utils/querypara"
+import { queryParamGenerator } from "../../../utils/querypara";
 
 const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   const router = useRouter();
@@ -55,18 +56,60 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
 
         <ScrollView h="220px" w={sWidth}>
           {list.map((element, index) => {
-            return (
-              <Button
-                mb="2px"
-                key={index}
-                variant="link"
-                onPress={() => {
-                  handleButton(element);
-                }}
-              >
-                <ButtonText> {element}</ButtonText>
-              </Button>
-            );
+            if (title == "Your Projects") {
+              return (
+                <Button
+                  mb="2px"
+                  key={index}
+                  variant="link"
+                  onPress={() => {
+                    handleButton(element);
+                  }}
+                >
+                  <ButtonText> {element}</ButtonText>
+                </Button>
+              );
+            } else {
+              return (
+                <div
+                  key={element.id}
+                  style={{
+                    display: "flex",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  <Button
+                    mb="2px"
+                    variant="link"
+                    onPress={() => {
+                      handleButton(element.news);
+                    }}
+                    isDisabled={true}
+                    w="60%"
+                    sx={{
+                      ":disabled": {
+                        opacity: 1,
+                      },
+                    }}
+                    action="secondary"
+                  >
+                    <ButtonText> {element.project} :</ButtonText>
+                  </Button>
+                  <Box></Box>
+
+                  <Button
+                    mb="2px"
+                    variant="link"
+                    onPress={() => {
+                      handleButton(element.news);
+                    }}
+                  >
+                    <ButtonText>{element.news}</ButtonText>
+                  </Button>
+                </div>
+              );
+            }
           })}
         </ScrollView>
       </Box>
@@ -103,3 +146,5 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
 };
 
 export default Scrollable;
+
+//width of button

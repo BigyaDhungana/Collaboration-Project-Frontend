@@ -23,26 +23,30 @@ import {
 import { config } from "../../../../../config/gluestack-ui.config";
 import { RiAddFill } from "react-icons/ri";
 
-const testlist = ["ine", "teo", "three", "four", "five"];
-const testlists = ["ek", "dui", "teen", "char", "fach"];
-const testlistss = ["eh", "aur", "sac", "che", "go"];
+const projectList = ["Bhiutii", "Sadak Vision", "khai k view"];
+const employeesList = ["Ram", "Shyam", "Hari", "Krishna"];
+const teamList = ["eh", "aur", "sac", "che", "go"];
+
+const taskPriorities = ["Urgent", "Not so Urgent", "Can skip"];
 
 const Addtask = () => {
-
- const [details, setDetails] = useState({ taskTitle: "", taskDesc: "" });
-const [selectDetails,setSelectdetails]=useState({teamName:"",empName:"",projectName:""})
+  const [details, setDetails] = useState({ taskTitle: "", taskDesc: "" });
+  const [selectDetails, setSelectdetails] = useState({
+    teamName: "",
+    empName: "",
+    projectName: "",
+    taskPriority: "",
+  });
   //prevent ssr
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
   }, []);
   if (!isMounted) return;
-  
- 
 
-  const handleAddtask=()=>{
-    console.log(details,selectDetails)
-  }
+  const handleAddtask = () => {
+    console.log(details, selectDetails);
+  };
 
   return (
     <>
@@ -93,7 +97,7 @@ const [selectDetails,setSelectdetails]=useState({teamName:"",empName:"",projectN
                         <option value="none" disabled hidden>
                           Select an Option
                         </option>
-                        {testlist.map((element, index) => {
+                        {projectList.map((element, index) => {
                           return (
                             <option value={element} key={index}>
                               {element}
@@ -120,7 +124,7 @@ const [selectDetails,setSelectdetails]=useState({teamName:"",empName:"",projectN
                           <option value="none" disabled hidden>
                             Select an Option
                           </option>
-                          {testlists.map((element, index) => {
+                          {employeesList.map((element, index) => {
                             return (
                               <option value={element} key={index}>
                                 {element}
@@ -146,7 +150,33 @@ const [selectDetails,setSelectdetails]=useState({teamName:"",empName:"",projectN
                           <option value="none" disabled hidden>
                             Select an Option
                           </option>
-                          {testlistss.map((element, index) => {
+                          {teamList.map((element, index) => {
+                            return (
+                              <option value={element} key={index}>
+                                {element}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </VStack>
+                      <VStack>
+                        <Text size="lg">Task Priority</Text>
+                        <select
+                          name="taskProirity"
+                          id="tPriority"
+                          className="selectlist"
+                          onChange={(e) =>
+                            setSelectdetails({
+                              ...selectDetails,
+                              taskPriority: e.target.value,
+                            })
+                          }
+                          defaultValue="none"
+                        >
+                          <option value="none" disabled hidden>
+                            Select an Option
+                          </option>
+                          {taskPriorities.map((element, index) => {
                             return (
                               <option value={element} key={index}>
                                 {element}
