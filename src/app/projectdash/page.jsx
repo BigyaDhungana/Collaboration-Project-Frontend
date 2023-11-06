@@ -13,6 +13,10 @@ import {
 import { config } from "../../../config/gluestack-ui.config";
 import Scrollbox from "./components/scrollbox";
 import { todos } from "../testdata/data";
+import Task from "./components/task";
+import { LuListTodo } from "react-icons/lu";
+import { TbProgress } from "react-icons/tb";
+import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 const ProjectDash = () => {
   //get query param
   const searchParam = useSearchParams();
@@ -48,9 +52,9 @@ const ProjectDash = () => {
               <ProjectHeader projectname={pname} func={getProjTeamdata} />
             </Center>
             <HStack>
-              <Scrollbox title={"TODO"} />
-              <Scrollbox title={"In Progress"} />
-              <Scrollbox title={"Completed"} />
+              <Scrollbox title={"TODO"}><LuListTodo/></Scrollbox>
+              <Scrollbox title={"In Progress"}><TbProgress/></Scrollbox>
+              <Scrollbox title={"Completed"}><IoCheckmarkDoneCircleOutline/></Scrollbox>
             </HStack>
           </VStack>
         </HStack>

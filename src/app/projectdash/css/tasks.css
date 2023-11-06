@@ -1,0 +1,51 @@
+.task-container {
+  display: flex;
+  justify-content: space-evenly;
+  padding-right: 1px;
+  background-color: rgb(245, 242, 242);
+  margin-bottom: 3px;
+}
+
+.task-icons {
+  display: none;
+}
+
+.task-text {
+  margin-left: 5px;
+}
+
+.task-container:hover .task-icons {
+  display: flex;
+  padding: 5px;
+}
+
+.task-container:hover .task-text {
+    display: none;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: fit-content;
+  background-color: gray;
+  color: #fff;
+  text-align: center;
+  padding: 5px 5px;
+  border-radius: 8px;
+  margin: 25px;
+  position: absolute;
+  z-index: 2;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.btn {
+  margin-right: 5px;
+  position: relative;
+  display: inline-block;
+}
+
+.btn:hover .tooltiptext {
+  visibility: visible;
+}
