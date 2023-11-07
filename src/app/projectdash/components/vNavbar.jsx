@@ -12,12 +12,14 @@ const VNavbar = () => {
     documentation: "",
     addtask: "",
   });
-  useEffect(() => {  if (currentPath.includes("documentation")) {
-    setActive({ tasks: "", documentation: "active", addtask: "" });
-  }
-  if (currentPath.includes("addtask")) {
-    setActive({ tasks: "", documentation: "", addtask: "active" });
-  }}, []);
+  useEffect(() => {
+    if (currentPath.includes("documentation")) {
+      setActive({ tasks: "", documentation: "active", addtask: "" });
+    }
+    if (currentPath.includes("addtask")) {
+      setActive({ tasks: "", documentation: "", addtask: "active" });
+    }
+  }, []);
 
   return (
     <div
@@ -28,6 +30,7 @@ const VNavbar = () => {
         display: "block",
         width: "200px",
         marginTop: "10px",
+        height: "450px",
       }}
     >
       <div>

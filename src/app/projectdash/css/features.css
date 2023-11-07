@@ -17,4 +17,31 @@
 /* background-color: black;
   color: white;
 } */
+.toolbar {
+  position: fixed;
+  left: 250px;
+  top: 300px;
+  display: block;
+}
 
+.editor {
+  display: flex;
+  position: relative;
+  left: 30px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 5px;
+  width: 93.5%;
+}
+
+.div-scroll {
+  height: 420px;
+  overflow: auto;
+}
+
+.cdocs-main {
+  width: 80%;
+  position: absolute;
+  right: 55px;
+
+}
