@@ -1,9 +1,9 @@
 .selectlist {
-  font-size: 20px;
+  font-size: 16px;
   margin-top: 3px;
 }
 
-.tiptap {
+/* .tiptap {
   padding: 10px;
   background-color: black;
   color: white;
@@ -13,10 +13,13 @@
   outline-style: none;
   box-shadow: none;
   border-color: transparent;
-}
+} */
 /* background-color: black;
   color: white;
 } */
+
+/* editor */
+
 .toolbar {
   position: fixed;
   left: 250px;
@@ -43,5 +46,64 @@
   width: 80%;
   position: absolute;
   right: 55px;
+}
 
+/*project  media*/
+
+.mediaButtonsdiv {
+  /* display: flex;
+  justify-content: space-between; */
+  display: none;
+  width: 200px;
+}
+
+.mediaContainer {
+  /* min-width: 250px;
+  max-width: 250px; */
+  /* height: 250px; */
+  border: 0.3px black solid;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 20px;
+}
+
+.media {
+  display: flex;
+  flex-wrap: wrap;
+
+  /* border: 0.5px red solid; */
+}
+
+.smedia {
+  width: 300px;
+}
+
+.mediaHeader {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+/* .mediaImageC {
+  border-radius: 6px;
+} */
+
+.mediaImage {
+  border-radius: 6px;
+}
+
+.mediaContainer:hover .mediaButtonsdiv {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  z-index: 1;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.fileUpload {
+  border: 0.3px black solid;
+  padding: 3px 6px;
+  cursor: pointer;
 }

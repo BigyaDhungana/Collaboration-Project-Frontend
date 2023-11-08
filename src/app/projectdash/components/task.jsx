@@ -46,7 +46,11 @@ const Task = ({ task, taskType }) => {
         <div className="task-icons">
           <div className="btn">
             <Tooltip tooltiptext="task description" />
-            <Button action="positive" onPress={() => handleDesc(task)}>
+            <Button
+              action="positive"
+              onPress={() => handleDesc(task)}
+              size="sm"
+            >
               <ButtonIcon>
                 <MdOutlineDocumentScanner />
               </ButtonIcon>
@@ -62,6 +66,7 @@ const Task = ({ task, taskType }) => {
               onPress={() => {
                 handleButtonpress(task, "todo");
               }}
+              size="sm"
             >
               <ButtonIcon>
                 <LuListTodo />
@@ -78,6 +83,7 @@ const Task = ({ task, taskType }) => {
               onPress={() => {
                 handleButtonpress(task, "inProgress");
               }}
+              size="sm"
             >
               <ButtonIcon>
                 <TbProgress />
@@ -94,6 +100,7 @@ const Task = ({ task, taskType }) => {
               onPress={() => {
                 handleButtonpress(task, "completed");
               }}
+              size="sm"
             >
               <ButtonIcon>
                 <IoCheckmarkDoneCircleOutline />

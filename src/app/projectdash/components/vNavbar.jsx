@@ -11,14 +11,19 @@ const VNavbar = () => {
     tasks: "active",
     documentation: "",
     addtask: "",
+    media:"",
   });
   useEffect(() => {
     if (currentPath.includes("documentation")) {
-      setActive({ tasks: "", documentation: "active", addtask: "" });
+      setActive({ tasks: "", documentation: "active", addtask: "",media:"" });
     }
     if (currentPath.includes("addtask")) {
-      setActive({ tasks: "", documentation: "", addtask: "active" });
+      setActive({ tasks: "", documentation: "", addtask: "active",media:"" });
     }
+    if (currentPath.includes("media")) {
+      setActive({ tasks: "", documentation: "", addtask: "", media: "active" });
+    }
+ 
   }, []);
 
   return (
@@ -54,6 +59,12 @@ const VNavbar = () => {
           className={`link ${active.addtask}`}
         >
           Add Tasks
+        </Link>
+        <Link
+          href={"/projectdash/media"}
+          className={`link ${active.media}`}
+        >
+          Media
         </Link>
       </div>
     </div>

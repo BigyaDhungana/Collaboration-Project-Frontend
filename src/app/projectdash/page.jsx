@@ -38,8 +38,8 @@ const ProjectDash = () => {
     setSteamName(teamname);
   };
 
-  console.log(`selected project name=${sProjectName} \t
-  selected team name=${sTeamName}`);
+  // console.log(`selected project name=${sProjectName} \t
+  // selected team name=${sTeamName}`);
 
   return (
     <>

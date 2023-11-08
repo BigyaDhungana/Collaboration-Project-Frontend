@@ -19,17 +19,22 @@ import {
   ModalFooter,
   Center,
 } from "@gluestack-ui/themed";
-import React from "react";
+import React, { useId } from "react";
 import { config } from "../../../../config/gluestack-ui.config";
 import { useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import {
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  AiFillFileImage,
+} from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { FiUpload } from "react-icons/fi";
 import logo from "/public/loginpc.jpg";
 
 const Loginpage = () => {
   const router = useRouter();
-
+  
   //eye eycon haha
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordState = () => {
@@ -47,6 +52,7 @@ const Loginpage = () => {
     username: "",
     password: "",
   });
+  const [pppicture, setPppicture] = useState(null);
   const [showSignup, setShowSignup] = useState(false);
 
   const handleAuth = () => {
@@ -66,7 +72,8 @@ const Loginpage = () => {
       signupInfo.lname == "" ||
       signupInfo.email == "" ||
       signupInfo.username == "" ||
-      signupInfo.password == ""
+      signupInfo.password == "" ||
+      pppicture === null
     ) {
       alert("fill all the field");
     } else {
@@ -127,6 +134,7 @@ const Loginpage = () => {
                             type="text"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email ? email : ""}
+                            id="uname"
                           />
                         </Input>
                       </VStack>
@@ -138,6 +146,7 @@ const Loginpage = () => {
                             type={showPassword ? "text" : "password"}
                             onChange={(e) => setPassword(e.target.value)}
                             value={password ? password : ""}
+                            id="pass"
                           />
                           <InputSlot onPress={handlePasswordState}>
                             {showPassword ? (
@@ -177,10 +186,13 @@ const Loginpage = () => {
             </HStack>
           </Box>
         </Box>
-
+        {/* Sign up */}
         <Modal
           isOpen={showSignup}
-          onClose={() => setShowSignup(false)}
+          onClose={() => {
+            setShowSignup(false);
+            setPppicture(null);
+          }}
           size="lg"
         >
           {/* Signup */}
@@ -207,6 +219,7 @@ const Loginpage = () => {
                       onChange={(e) =>
                         setSignupinfo({ ...signupInfo, fname: e.target.value })
                       }
+                      id="fname"
                     />
                   </Input>
                   <Input
@@ -222,6 +235,7 @@ const Loginpage = () => {
                       onChange={(e) =>
                         setSignupinfo({ ...signupInfo, lname: e.target.value })
                       }
+                      id="lname"
                     />
                   </Input>
                 </HStack>
@@ -239,6 +253,7 @@ const Loginpage = () => {
                     onChange={(e) =>
                       setSignupinfo({ ...signupInfo, email: e.target.value })
                     }
+                    id="email"
                   />
                 </Input>
 
@@ -259,6 +274,7 @@ const Loginpage = () => {
                           username: e.target.value,
                         })
                       }
+                      id="uuname"
                     />
                   </Input>
                   <Input
@@ -277,6 +293,7 @@ const Loginpage = () => {
                           password: e.target.value,
                         })
                       }
+                      id="password"
                     />
                     <InputSlot onPress={handlePasswordState}>
                       {showPassword ? (
@@ -287,6 +304,35 @@ const Loginpage = () => {
                     </InputSlot>
                   </Input>
                 </HStack>
+                <input
+                  type="file"
+                  id="ppp"
+                  onChange={(e) => {
+                    setPppicture(e.target.files[0]);
+                  }}
+                  style={{ display: "none" }}
+                />
+                <label
+                  htmlFor="ppp"
+                  style={{
+                    borderWidth: "0.3px",
+                    borderColor: "black",
+                    borderStyle: "dashed",
+                    width: "fit-content",
+                    padding: "2px",
+                  }}
+                >
+                  {pppicture ? (
+                    <>
+                      <AiFillFileImage />
+                      {pppicture.name}
+                    </>
+                  ) : (
+                    <>
+                      <FiUpload /> "Click here to upload profile picture . "
+                    </>
+                  )}
+                </label>
                 <Text size="2xs">
                   By clicking Sign Up, you agree to our Terms, Privacy Policy
                   and Cookies Policy.
