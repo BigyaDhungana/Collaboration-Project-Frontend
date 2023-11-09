@@ -1,7 +1,6 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { yourProjects, teamnames } from "../../testdata/data";
 import "../css/index.css";
-
 const ProjectHeader = ({ projectname, func }) => {
   const [projectName, setProjectName] = useState(projectname);
   const [teamName, setTeamName] = useState("mobile app");

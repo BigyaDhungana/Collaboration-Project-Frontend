@@ -31,10 +31,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
 import logo from "/public/loginpc.jpg";
+// import { useUserContext } from "../../../context/userContext";
 
 const Loginpage = () => {
   const router = useRouter();
-  
+
   //eye eycon haha
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordState = () => {
@@ -54,6 +55,7 @@ const Loginpage = () => {
   });
   const [pppicture, setPppicture] = useState(null);
   const [showSignup, setShowSignup] = useState(false);
+  // const { authKey, useAuthkey } = useUserContext();
 
   const handleAuth = () => {
     if (email === "bigya" && password === "123") {
@@ -62,6 +64,7 @@ const Loginpage = () => {
       alert("Wrong email or password");
       setEmail("");
       setPassword("");
+
       return;
     }
   };

@@ -25,6 +25,14 @@ const ProjectDash = () => {
   const [sProjectName, setSprojectName] = useState("");
   const [sTeamName, setSteamName] = useState("");
 
+  // useEffect(() => {
+  //   (async()=>{
+  //     const data=await getTodo()
+  //     console.log(data);
+  //   })()
+    
+  // }, []);
+
   //prevent ssr
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -52,9 +60,15 @@ const ProjectDash = () => {
               <ProjectHeader projectname={pname} func={getProjTeamdata} />
             </Center>
             <HStack>
-              <Scrollbox title={"TODO"}><LuListTodo/></Scrollbox>
-              <Scrollbox title={"In Progress"}><TbProgress/></Scrollbox>
-              <Scrollbox title={"Completed"}><IoCheckmarkDoneCircleOutline/></Scrollbox>
+              <Scrollbox title={"TODO"}>
+                <LuListTodo />
+              </Scrollbox>
+              <Scrollbox title={"In Progress"}>
+                <TbProgress />
+              </Scrollbox>
+              <Scrollbox title={"Completed"}>
+                <IoCheckmarkDoneCircleOutline />
+              </Scrollbox>
             </HStack>
           </VStack>
         </HStack>
