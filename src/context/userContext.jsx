@@ -4,9 +4,9 @@ import { useState, useContext, createContext } from "react";
 const userContext = createContext();
 
 const Usercontextcmp = ({ children }) => {
-  const [authKey, useAuthkey] = useState("klsdfj3984klds");
+  const [authKey, setAuthkey] = useState("klsdfj3984klds");
   return (
-    <userContext.Provider value={{authKey,useAuthkey}}>
+    <userContext.Provider value={{authKey,setAuthkey}}>
         {children}
     </userContext.Provider>
   )

@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
-import { Providers } from "./providers";
-import StyledJsxRegistry from "../../registry";
+import { Gluestackproviders } from "../context/Gluestackproviders";
+import StyledJsxRegistry from "../context/registry"
 import Usercontextcmp from "../context/userContext"
+import { Reactqueryprovider } from "../context/reactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,9 +16,11 @@ export default function RootLayout({ children }) {
     <html lang="en" className="gs">
       <body className={inter.className}>
         <Usercontextcmp>
-          <Providers>
-            <StyledJsxRegistry>{children}</StyledJsxRegistry>
-          </Providers>
+          <Reactqueryprovider>
+            <Gluestackproviders>
+              <StyledJsxRegistry>{children}</StyledJsxRegistry>
+            </Gluestackproviders>
+          </Reactqueryprovider>
         </Usercontextcmp>
       </body>
     </html>
