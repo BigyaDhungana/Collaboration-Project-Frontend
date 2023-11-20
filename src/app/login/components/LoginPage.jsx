@@ -10,7 +10,6 @@ import {
   Button,
   ButtonText,
   InputSlot,
-  InputIcon,
   Divider,
   Modal,
   ModalContent,
@@ -19,7 +18,7 @@ import {
   ModalFooter,
   Center,
 } from "@gluestack-ui/themed";
-import React, { useId } from "react";
+import React from "react";
 import { config } from "../../../../config/gluestack-ui.config";
 import { useState } from "react";
 import {
@@ -31,7 +30,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
 import logo from "/public/loginpc.jpg";
-// import { useUserContext } from "../../../context/userContext";
+import { useMutation } from "@tanstack/react-query";
+import { signupApi, loginApi } from "../../../apiFunc/api";
+import { toast } from "react-toastify";
+import { useUserContext } from "../../../context/userContext";
 
 const Loginpage = () => {
   const router = useRouter();
@@ -44,7 +46,7 @@ const Loginpage = () => {
     });
   };
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [signupInfo, setSignupinfo] = useState({
     fname: "",
@@ -53,19 +55,49 @@ const Loginpage = () => {
     username: "",
     password: "",
   });
-  const [pppicture, setPppicture] = useState(null);
+  const [pppicture, setPppicture] = useState(undefined);
   const [showSignup, setShowSignup] = useState(false);
-  // const { authKey, useAuthkey } = useUserContext();
+  const { authToken, useAuthtoken,userDetails,setUserDetails } = useUserContext();
+
+  //api call
+  const signupResponse = useMutation({
+    mutationFn: (signupFormData) => signupApi(signupFormData),
+    onError: (error) => {
+      showToast(error.message,"error");
+      setSignupinfo({...signupInfo,username:"",password:""})
+    },
+    onSuccess: () => {
+      setShowSignup(false);
+      showToast("Sign Up successful","success")
+      setPppicture(undefined);
+      setSignupinfo({
+        fname: "",
+        lname: "",
+        email: "",
+        username: "",
+        password: "",
+      });
+    },
+  });
+  const loginResponse = useMutation({
+    mutationFn: (loginData) => loginApi(loginData),
+    onError: (error) => {
+      showToast(error.message,"error");
+      setUsername("");
+      setPassword("");
+    },
+    onSuccess: () => {
+      router.push("/maindash");
+    },
+  });
 
   const handleAuth = () => {
-    if (email === "bigya" && password === "123") {
-      router.push("/maindash");
-    } else {
-      alert("Wrong email or password");
-      setEmail("");
-      setPassword("");
 
-      return;
+    if (!(username && password)){
+      showToast("Fill all the field","error")
+    }
+    else{
+      loginResponse.mutate({ username, password });
     }
   };
 
@@ -76,13 +108,26 @@ const Loginpage = () => {
       signupInfo.email == "" ||
       signupInfo.username == "" ||
       signupInfo.password == "" ||
-      pppicture === null
+      pppicture === undefined
     ) {
-      alert("fill all the field");
-    } else {
-      alert("Sign up Complete");
-      console.log(signupInfo);
-      setShowSignup(false);
+      showToast("fill all the fields","error");
+    } 
+
+    else {
+      const ext = pppicture.name.split(".").pop();
+      if (ext !== "jpg" && ext !== "jpeg" && ext !== "png") {
+        showToast("Only jpg/jpeg and png files are allowed","error");
+        return;
+      }
+      const signupFormData = new FormData();
+      signupFormData.append("username", signupInfo.username);
+      signupFormData.append("password", signupInfo.password);
+      signupFormData.append("profile_pic", pppicture);
+      signupFormData.append("first_name", signupInfo.fname);
+      signupFormData.append("last_name", signupInfo.lname);
+      signupFormData.append("email", signupInfo.email);
+      signupResponse.mutate(signupFormData);
+      // console.log(signupResponse.data);
     }
   };
 
@@ -135,8 +180,8 @@ const Loginpage = () => {
                           <InputField
                             placeholder="Enter your username"
                             type="text"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email ? email : ""}
+                            onChange={(e) => setUsername(e.target.value)}
+                            value={username ? username : ""}
                             id="uname"
                           />
                         </Input>
@@ -194,7 +239,7 @@ const Loginpage = () => {
           isOpen={showSignup}
           onClose={() => {
             setShowSignup(false);
-            setPppicture(null);
+            setPppicture(undefined)
           }}
           size="lg"
         >
@@ -278,6 +323,7 @@ const Loginpage = () => {
                         })
                       }
                       id="uuname"
+                      value={signupInfo.username?signupInfo.username:""}
                     />
                   </Input>
                   <Input
@@ -297,6 +343,7 @@ const Loginpage = () => {
                         })
                       }
                       id="password"
+                      value={signupInfo.password ? signupInfo.password : ""}
                     />
                     <InputSlot onPress={handlePasswordState}>
                       {showPassword ? (
@@ -375,3 +422,16 @@ const Loginpage = () => {
 };
 
 export default Loginpage;
+
+const showToast = (message,type) => {
+  toast[type](message, {
+    position: "top-left",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  });
+};

@@ -3,6 +3,8 @@ import { Gluestackproviders } from "../context/Gluestackproviders";
 import StyledJsxRegistry from "../context/registry"
 import Usercontextcmp from "../context/userContext"
 import { Reactqueryprovider } from "../context/reactQueryProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +21,18 @@ export default function RootLayout({ children }) {
           <Reactqueryprovider>
             <Gluestackproviders>
               <StyledJsxRegistry>{children}</StyledJsxRegistry>
+              <ToastContainer
+                position="top-left"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+              />
             </Gluestackproviders>
           </Reactqueryprovider>
         </Usercontextcmp>

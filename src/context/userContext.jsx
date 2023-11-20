@@ -4,9 +4,10 @@ import { useState, useContext, createContext } from "react";
 const userContext = createContext();
 
 const Usercontextcmp = ({ children }) => {
-  const [authKey, setAuthkey] = useState("klsdfj3984klds");
+  const [authToken, setAuthtoken] = useState(null);
+  const [userDetails,setUserDetails]=useState({username:"",userID:"",profilePic:""})
   return (
-    <userContext.Provider value={{authKey,setAuthkey}}>
+    <userContext.Provider value={{authToken,setAuthtoken,userDetails,setUserDetails}}>
         {children}
     </userContext.Provider>
   )
