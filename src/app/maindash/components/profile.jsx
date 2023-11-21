@@ -25,37 +25,71 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
+  AvatarImage,
+  Image,
 } from "@gluestack-ui/themed";
 import { config } from "../../../../config/gluestack-ui.config";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUserContext } from "../../../context/userContext";
 //dummy
 import { dummyinfo } from "../../testdata/data";
+import { useMutation } from "@tanstack/react-query";
+import { logoutApi } from "../../../apiFunc/users";
+import { showToast } from "../../../utils/toasT";
+import { useLocalData } from "../../../hooks/useLocalData";
 
 const Profile = () => {
+  // console.log(authToken)
+  const router = useRouter();
+
+  // const { authToken, setAuthtoken, userDetails, setUserDetails } =
+  //   useUserContext();
+
+  const { authToken, userDetails, isMounted } = useLocalData();
+  const { email, name, profile_picture, userID, username } = userDetails;
+
+  const logoutResponse = useMutation({
+    mutationFn: () => {
+      logoutApi(authToken);
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
+    onSuccess: () => {
+      showToast("Logged out successfully", "success");
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userDetails");
+      router.push("/");
+    },
+  });
+
   const [profileClicked, setProfileClicked] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const route = useRouter();
 
   const handleLogout = () => {
-    route.push("/");
+    logoutResponse.mutate();
   };
+  if (!isMounted) return;
 
   return (
     <GluestackUIProvider config={config}>
       <HStack space="md">
         <Avatar bgColor="$amber600" size="md">
-          <AvatarFallbackText color="$white">
-            {dummyinfo.name}
-          </AvatarFallbackText>
-          <AvatarBadge></AvatarBadge>
-          {/* <Icon as={RxAvatar}></Icon> */}
+          <AvatarFallbackText color="$white">{username}</AvatarFallbackText>
+          <AvatarBadge />
+          <AvatarImage
+            source={{
+              uri: `${process.env.NEXT_PUBLIC_API_URL}${profile_picture}`,
+            }}
+          />
         </Avatar>
         <VStack>
-          <Text bold>{dummyinfo.name}</Text>
-          <Text size="sm">{dummyinfo.role}</Text>
+          <Text bold>{username}</Text>
+          <Text size="sm">{email}</Text>
         </VStack>
 
         <Menu
@@ -106,20 +140,34 @@ const Profile = () => {
             </ModalHeader>
           </Center>
           <ModalBody>
-            <VStack space="xl">
-              <HStack>
-                <Text>Your Name :</Text>
-                <Text> {dummyinfo.name}</Text>
-              </HStack>
-              <HStack>
-                <Text>Your Role :</Text>
-                <Text> {dummyinfo.role} </Text>
-              </HStack>
-              <HStack>
-                <Text>Created Date :</Text>
-                <Text> {dummyinfo.created}</Text>
-              </HStack>
-            </VStack>
+            <div style={{display:"flex",justifyContent:"space-evenly" }}>
+              <VStack space="xl">
+                <HStack>
+                  <Text>Name :</Text>
+                  <Text> {name}</Text>
+                </HStack>
+                <HStack>
+                  <Text>Email :</Text>
+                  <Text> {email} </Text>
+                </HStack>
+                <HStack>
+                  <Text>Username :</Text>
+                  <Text> {username}</Text>
+                </HStack>
+                <HStack>
+                  <Text>User Id :</Text>
+                  <Text> {userID}</Text>
+                </HStack>
+              </VStack>
+              
+       <Image
+       size="xl" borderRadius="$full" 
+         source={{
+            uri:`${process.env.NEXT_PUBLIC_API_URL}${profile_picture}`,
+          }}
+      />
+      
+            </div>
           </ModalBody>
           <Center>
             <ModalFooter>

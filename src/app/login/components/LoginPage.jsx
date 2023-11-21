@@ -17,6 +17,7 @@ import {
   ModalBody,
   ModalFooter,
   Center,
+  ButtonIcon,
 } from "@gluestack-ui/themed";
 import React from "react";
 import { config } from "../../../../config/gluestack-ui.config";
@@ -25,15 +26,22 @@ import {
   AiOutlineEye,
   AiOutlineEyeInvisible,
   AiFillFileImage,
+  AiOutlineLoading3Quarters,
 } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
 import logo from "/public/loginpc.jpg";
 import { useMutation } from "@tanstack/react-query";
-import { signupApi, loginApi } from "../../../apiFunc/api";
-import { toast } from "react-toastify";
+import { signupApi, loginApi } from "../../../apiFunc/users";
+// import { toast } from "react-toastify";
 import { useUserContext } from "../../../context/userContext";
+import { showToast } from "../../../utils/toasT";
+import {
+  savetoLocalStorage,
+  getfromLocalStorage,
+} from "../../../utils/localstorage";
+import "../css/login.css";
 
 const Loginpage = () => {
   const router = useRouter();
@@ -46,7 +54,7 @@ const Loginpage = () => {
     });
   };
 
-  const [username, setUsername] = useState("");
+  const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [signupInfo, setSignupinfo] = useState({
     fname: "",
@@ -57,18 +65,18 @@ const Loginpage = () => {
   });
   const [pppicture, setPppicture] = useState(undefined);
   const [showSignup, setShowSignup] = useState(false);
-  const { authToken, useAuthtoken,userDetails,setUserDetails } = useUserContext();
+  const { setAuthtoken, setUserDetails } = useUserContext();
 
   //api call
   const signupResponse = useMutation({
     mutationFn: (signupFormData) => signupApi(signupFormData),
     onError: (error) => {
-      showToast(error.message,"error");
-      setSignupinfo({...signupInfo,username:"",password:""})
+      showToast(error.message, "error");
+      setSignupinfo({ ...signupInfo, username: "", password: "" });
     },
     onSuccess: () => {
       setShowSignup(false);
-      showToast("Sign Up successful","success")
+      showToast("Sign Up successful", "success");
       setPppicture(undefined);
       setSignupinfo({
         fname: "",
@@ -82,22 +90,36 @@ const Loginpage = () => {
   const loginResponse = useMutation({
     mutationFn: (loginData) => loginApi(loginData),
     onError: (error) => {
-      showToast(error.message,"error");
+      showToast(error.response.data.error || error.message, "error");
       setUsername("");
       setPassword("");
     },
-    onSuccess: () => {
+
+    onSuccess: (data) => {
+      // console.log(data.data);
+      const { username, token, profile_picture, userID, name, email } =
+        data.data;
+      savetoLocalStorage("authToken", token);
+      savetoLocalStorage("userDetails", {
+        username,
+        profile_picture,
+        userID,
+        name,
+        email,
+      });
+      // setAuthtoken(token);
+      // setUserDetails({ username, userID, profile_picture, name, email });
+
       router.push("/maindash");
     },
+    networkMode: "always",
   });
 
   const handleAuth = () => {
-
-    if (!(username && password)){
-      showToast("Fill all the field","error")
-    }
-    else{
-      loginResponse.mutate({ username, password });
+    if (!(userName && password)) {
+      showToast("Fill all the field", "error");
+    } else {
+      loginResponse.mutate({ username: userName, password });
     }
   };
 
@@ -110,13 +132,11 @@ const Loginpage = () => {
       signupInfo.password == "" ||
       pppicture === undefined
     ) {
-      showToast("fill all the fields","error");
-    } 
-
-    else {
+      showToast("fill all the fields", "error");
+    } else {
       const ext = pppicture.name.split(".").pop();
       if (ext !== "jpg" && ext !== "jpeg" && ext !== "png") {
-        showToast("Only jpg/jpeg and png files are allowed","error");
+        showToast("Only jpg/jpeg and png files are allowed", "error");
         return;
       }
       const signupFormData = new FormData();
@@ -181,7 +201,7 @@ const Loginpage = () => {
                             placeholder="Enter your username"
                             type="text"
                             onChange={(e) => setUsername(e.target.value)}
-                            value={username ? username : ""}
+                            value={userName ? userName : ""}
                             id="uname"
                           />
                         </Input>
@@ -211,8 +231,15 @@ const Loginpage = () => {
                         action="primary"
                         textAlign="center"
                         onPress={handleAuth}
+                        isDisabled={loginResponse.isPending}
                       >
-                        <ButtonText>Login </ButtonText>
+                        <ButtonText>
+                          {loginResponse.isPending ? (
+                            <AiOutlineLoading3Quarters className="loading" />
+                          ) : (
+                            <>Login</>
+                          )}
+                        </ButtonText>
                       </Button>
                       <Divider />
                       <Button
@@ -221,6 +248,7 @@ const Loginpage = () => {
                         action="positive"
                         textAlign="center"
                         onPress={() => setShowSignup(true)}
+                        isDisabled={loginResponse.isPending}
                       >
                         <ButtonText>Sign Up</ButtonText>
                       </Button>
@@ -239,7 +267,7 @@ const Loginpage = () => {
           isOpen={showSignup}
           onClose={() => {
             setShowSignup(false);
-            setPppicture(undefined)
+            setPppicture(undefined);
           }}
           size="lg"
         >
@@ -323,7 +351,7 @@ const Loginpage = () => {
                         })
                       }
                       id="uuname"
-                      value={signupInfo.username?signupInfo.username:""}
+                      value={signupInfo.username ? signupInfo.username : ""}
                     />
                   </Input>
                   <Input
@@ -399,6 +427,8 @@ const Loginpage = () => {
                     action="negative"
                     textAlign="center"
                     onPress={() => setShowSignup(false)}
+                    w="100px"
+                    isDisabled={signupResponse.isPending}
                   >
                     <ButtonText>Cancel</ButtonText>
                   </Button>
@@ -408,8 +438,16 @@ const Loginpage = () => {
                     action="positive"
                     textAlign="center"
                     onPress={handleSignup}
+                    w="100px"
+                    isDisabled={signupResponse.isPending}
                   >
-                    <ButtonText>Sign Up</ButtonText>
+                    <ButtonText>
+                      {signupResponse.isPending ? (
+                        <AiOutlineLoading3Quarters className="loading" />
+                      ) : (
+                        <>Sign Up</>
+                      )}
+                    </ButtonText>
                   </Button>
                 </HStack>
               </VStack>
@@ -423,15 +461,15 @@ const Loginpage = () => {
 
 export default Loginpage;
 
-const showToast = (message,type) => {
-  toast[type](message, {
-    position: "top-left",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "colored",
-  });
-};
+// const showToast = (message, type) => {
+//   toast[type](message, {
+//     position: "top-left",
+//     autoClose: 5000,
+//     hideProgressBar: false,
+//     closeOnClick: true,
+//     pauseOnHover: true,
+//     draggable: true,
+//     progress: undefined,
+//     theme: "colored",
+//   });
+// };

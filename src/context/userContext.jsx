@@ -5,7 +5,7 @@ const userContext = createContext();
 
 const Usercontextcmp = ({ children }) => {
   const [authToken, setAuthtoken] = useState(null);
-  const [userDetails,setUserDetails]=useState({username:"",userID:"",profilePic:""})
+  const [userDetails,setUserDetails]=useState({})
   return (
     <userContext.Provider value={{authToken,setAuthtoken,userDetails,setUserDetails}}>
         {children}

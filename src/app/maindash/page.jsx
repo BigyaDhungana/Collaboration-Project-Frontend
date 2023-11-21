@@ -5,25 +5,22 @@ import React, { useEffect, useState } from "react";
 import Headerbar from "./components/header";
 import Scrollable from "./components/scrollable";
 import Stable from "./components/scrolltable";
+import { useUserContext } from "../../context/userContext";
+import { useLocalData } from "../../hooks/useLocalData";
+
+
 //dummy
-import { news, tasks, dummyinfo, yourProjects,nws } from "../testdata/data";
+import { news, tasks, dummyinfo, yourProjects, nws } from "../testdata/data";
 
 const Dashboard = () => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return;
-  }
-
+  // const { authToken, userDetails } = useUserContext();
+  // console.log(userDetails);
+  const { authToken, userDetails } = useLocalData();
   return (
     <>
       <Headerbar />
       <Center>
-        <Heading size="3xl">Hello, {dummyinfo.name}</Heading>
+        <Heading size="3xl">Hello, {userDetails?.name}</Heading>
       </Center>
 
       <HStack>
@@ -35,10 +32,9 @@ const Dashboard = () => {
         />
         <VStack>
           <Scrollable title="News and Notices" list={nws} />
-          <Stable list={tasks} ></Stable>
+          <Stable list={tasks}></Stable>
         </VStack>
       </HStack>
-  
     </>
   );
 };

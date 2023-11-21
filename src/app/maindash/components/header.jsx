@@ -1,9 +1,9 @@
 import Profile from "./profile";
 import Image from "next/image";
 import logo from "/public/logo.svg";
-const Headerbar = () => {
+const Headerbar = (props) => {
 
-
+  
   return (
     <>
       <div
