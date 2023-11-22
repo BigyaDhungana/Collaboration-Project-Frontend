@@ -407,7 +407,7 @@ const Loginpage = () => {
                     </>
                   ) : (
                     <>
-                      <FiUpload /> "Click here to upload profile picture . "
+                      <FiUpload /> {"Click here to upload profile picture . "}
                     </>
                   )}
                 </label>

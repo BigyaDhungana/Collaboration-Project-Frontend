@@ -2,7 +2,7 @@
 const { withGluestackUI } = require("@gluestack/ui-next-adapter");
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   transpilePackages: ["@gluestack-ui/themed"],
   images: {
     remotePatterns: [

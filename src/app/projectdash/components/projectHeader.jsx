@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { yourProjects, teamnames } from "../../testdata/data";
 import "../css/index.css";
-const ProjectHeader = ({ projectname, func }) => {
-  const [projectName, setProjectName] = useState(projectname);
-  const [teamName, setTeamName] = useState("mobile app");
-
+import { realm } from "@mdxeditor/editor";
+const ProjectHeader = ({ initialProjectId, func, metaDatalist }) => {
+  const [projectId, setProjectId] = useState(initialProjectId);
+  const [teamId, setTeamId] = useState(
+    metaDatalist.find((project) => project.project_id == projectId).teams[0].id
+  );
+  // console.log(metaDatalist);
   const selectHandler = (e) => {
-    if (e.target.name == "projectname") {
-      setProjectName(e.target.value);
+    if (e.target.name == "projectnameid") {
+      setProjectId(e.target.value);
     } else {
-      setTeamName(e.target.value);
+      setTeamId(e.target.value);
     }
   };
 
   useEffect(() => {
-    func(projectName, teamName);
-  }, [projectName, teamName]);
-
+    const temp = metaDatalist.find((project) => project.project_id == projectId)
+      .teams[0].id;
+    setTeamId(temp);
+    func(projectId, teamId);
+    // console.log(teamId);
+  }, [projectId, teamId]);
+  // console.log(
+  //   metaDatalist.find((projectObj) => projectObj.project_id == initialProjectId)
+  //     .project_name
+  // );
   //variables
   //projectName->selected project name
   //teamName->selected team  name
@@ -32,15 +42,19 @@ const ProjectHeader = ({ projectname, func }) => {
       <div style={{ display: "flex" }}>
         <h3>Project Name :</h3>
         <select
-          name="projectname"
+          name="projectnameid"
           id="pnames"
           onChange={selectHandler}
-          defaultValue={projectName}
+          defaultValue={
+            metaDatalist.find(
+              (projectObj) => projectObj.project_id == initialProjectId
+            )?.project_id
+          }
         >
-          {yourProjects.map((project, index) => {
+          {metaDatalist.map((element) => {
             return (
-              <option value={project} key={index}>
-                {project}
+              <option value={element.project_id} key={element.project_id}>
+                {element.project_name}
               </option>
             );
           })}
@@ -49,14 +63,21 @@ const ProjectHeader = ({ projectname, func }) => {
 
       <div style={{ display: "flex" }}>
         <h3>Team Name :</h3>
-        <select name="teamname" id="tname" onChange={selectHandler}>
-          {teamnames.map((team, index) => {
-            return (
-              <option value={team} key={index}>
-                {team}
-              </option>
-            );
-          })}
+        <select
+          name="teamnameid"
+          id="tname"
+          onChange={selectHandler}
+          defaultValue={teamId}
+        >
+          {metaDatalist
+            .find((project) => project.project_id == projectId)
+            .teams.map((team) => {
+              return (
+                <option value={team.id} key={team.id}>
+                  {team.name}
+                </option>
+              );
+            })}
         </select>
       </div>
     </div>

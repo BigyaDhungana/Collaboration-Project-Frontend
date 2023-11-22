@@ -17,37 +17,32 @@ import Task from "./components/task";
 import { LuListTodo } from "react-icons/lu";
 import { TbProgress } from "react-icons/tb";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
+import { useLocalData } from "../../hooks/useLocalData";
 const ProjectDash = () => {
   //get query param
   const searchParam = useSearchParams();
-  const pname = searchParam.get("pname");
+  const pId = searchParam.get("pid");
+  // console.log(pId);
+  const { authToken, isMounted, metaData } = useLocalData();
 
-  const [sProjectName, setSprojectName] = useState("");
-  const [sTeamName, setSteamName] = useState("");
-
-  // useEffect(() => {
-  //   (async()=>{
-  //     const data=await getTodo()
-  //     console.log(data);
-  //   })()
-    
-  // }, []);
+  const [sProjectId, setSprojectId] = useState("");
+  const [sTeamId, setSteamId] = useState("");
 
   //prevent ssr
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // const [isMounted, setIsMounted] = useState(false);
+  // useEffect(() => {
+  //   setIsMounted(true);
+  // }, []);
   if (!isMounted) return;
 
   //get data form component
   const getProjTeamdata = (projname, teamname) => {
-    setSprojectName(projname);
-    setSteamName(teamname);
+    setSprojectId(projname);
+    setSteamId(teamname);
   };
 
-  // console.log(`selected project name=${sProjectName} \t
-  // selected team name=${sTeamName}`);
+  console.log(`selected project name=${sProjectId} \t
+  selected team name=${sTeamId}`);
 
   return (
     <>
@@ -57,7 +52,11 @@ const ProjectDash = () => {
           <VNavbar />
           <VStack space="3xl">
             <Center>
-              <ProjectHeader projectname={pname} func={getProjTeamdata} />
+              <ProjectHeader
+                initialProjectId={pId}
+                func={getProjTeamdata}
+                metaDatalist={metaData}
+              />
             </Center>
             <HStack>
               <Scrollbox title={"TODO"}>

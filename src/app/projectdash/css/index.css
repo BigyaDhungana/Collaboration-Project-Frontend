@@ -1,5 +1,7 @@
 select {
   border: none;
+  min-width: 150px;
+  text-align-last:center;
 }
 
 .link {

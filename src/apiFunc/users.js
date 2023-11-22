@@ -15,14 +15,14 @@ export const loginApi = async (data) => {
 
 export const metadataApi = async (token) => {
   const response = await axios.get(`${url}metadata/`, {
-    headers: { 'Authorization': token },
+    headers: { Authorization: `Token ${token}` },
   });
-  return response;
+  return response.data;
 };
 
 export const logoutApi = async (token) => {
-  const response=await axios.delete(`${url}logout/`,{headers:{'Authorization':`Token ${token}`}})
+  const response = await axios.delete(`${url}logout/`, {
+    headers: { Authorization: `Token ${token}` },
+  });
   return response;
-}
-
-
+};

@@ -1,9 +1,12 @@
 .task-container {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   padding-right: 1px;
-  background-color: rgb(245, 242, 242);
+  background-color: rgb(179, 172, 172);
   margin-bottom: 3px;
+  min-height: 80px;
+  text-align: center;
+  align-items: center;
 }
 
 .task-icons {
@@ -11,7 +14,8 @@
 }
 
 .task-text {
-  margin-left: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .task-container:hover .task-icons {
@@ -20,7 +24,7 @@
 }
 
 .task-container:hover .task-text {
-    display: none;
+  display: none;
 }
 
 .tooltiptext {

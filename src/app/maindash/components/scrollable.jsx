@@ -33,20 +33,19 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   //   return params.toString();
   // };
 
-  const handleButton = (elementName) => {
+  const handleButton = (elementName,title=undefined,body=undefined) => {
     if (route != "none") {
-      router.push(route + "?" + queryParamGenerator("pname", elementName));
+      router.push(route + "?" + queryParamGenerator("pid", elementName));
     } else {
-      console.log(`not defined for news and notices btw ${elementName}`);
+      // console.log(`not defined for news and notices btw ${elementName}`);
       setShowNews(true);
       setNews({
-        title: elementName,
-        content:
-          "naam bataiya :Bhupendra Jogi jdsklajfkldsjafkljdsklfjsdkaljfkldsajfkljdsklfjasdkljfkldsjfkljasdklfjsdkljfklajsdfkljadsfkljsdklajfklsdjafkljsdkljfkldsjafkljdsakljflkdsajfkljasdlkfjldksjfkljsdklfjsdkljflkjdsfjksdljflkdsjfkjsdkljfklsdjfkldsjflkjdsfljdslkfjdklsjfkldsjflkjsdlkfjdsljfl khass ma yo fetch garnu parne ho\nkl;sakdl;skadl",
+        title:title,
+        content:body,
       });
     }
   };
-
+  // console.log(list);
   return (
     <GluestackUIProvider config={config}>
       <Box borderWidth="0.5px" ml="5px" mr="5px" mt="30px" p="5px">
@@ -55,18 +54,18 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
         </Center>
 
         <ScrollView h="220px" w={sWidth}>
-          {list.map((element, index) => {
+          {list.map((element) => {
             if (title == "Your Projects") {
               return (
                 <Button
                   mb="2px"
-                  key={index}
+                  key={element.project_id}
                   variant="link"
                   onPress={() => {
-                    handleButton(element);
+                    handleButton(element.project_id);
                   }}
                 >
-                  <ButtonText> {element}</ButtonText>
+                  <ButtonText> {element.project_name}</ButtonText>
                 </Button>
               );
             } else {
@@ -82,9 +81,9 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
                   <Button
                     mb="2px"
                     variant="link"
-                    onPress={() => {
-                      handleButton(element.news);
-                    }}
+                    // onPress={() => {
+                    //   handleButton(element.title);
+                    // }}
                     isDisabled={true}
                     w="60%"
                     sx={{
@@ -102,10 +101,10 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
                     mb="2px"
                     variant="link"
                     onPress={() => {
-                      handleButton(element.news);
+                      handleButton(element.id,element.title,element.body);
                     }}
                   >
-                    <ButtonText>{element.news}</ButtonText>
+                    <ButtonText>{element.title}</ButtonText>
                   </Button>
                 </div>
               );

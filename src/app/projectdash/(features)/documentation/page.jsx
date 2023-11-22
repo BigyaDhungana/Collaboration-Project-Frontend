@@ -19,19 +19,27 @@ import "../../css/features.css";
 import { useRouter } from "next/navigation";
 import { documents } from "../../../testdata/data";
 import { queryParamGenerator } from "../../../../utils/querypara";
-
+import { getDocumentListApi } from "../../../../apiFunc/documents";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useLocalData } from "../../../../hooks/useLocalData";
 //test
 const projList = ["ine", "teo", "three", "four", "five"];
 
 const Documentation = () => {
   const router = useRouter();
+  const {authToken,isMounted}=useLocalData()
+  // const docListResponse = useQuery({
+  //   queryKey: ["doclist"],
+  //   queryFn: () => getDocumentListApi(authToken),
+  //   enabled:isMounted,
+  // });
 
   //prevent ssr
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!isMounted) return;
+  // const [isMounted, setIsMounted] = useState(false);
+  // useEffect(() => {
+  //   setIsMounted(true);
+  // }, []);
+  // if (!isMounted) return;
 
   const handleDocsNav = (docname) => {
     router.push(
@@ -45,10 +53,12 @@ const Documentation = () => {
     router.push("/projectdash/documentation/createdoc");
   };
 
-  const handleProjectSelection=(e)=>{
-    console.log(e.target.value)
-  }
-
+  const handleProjectSelection = (e) => {
+    console.log(e.target.value);
+  };
+  // if (!isMounted) {
+  //   return;
+  // }
   return (
     <Box w="80%">
       <Center>
@@ -77,17 +87,28 @@ const Documentation = () => {
         </HStack>
 
         <ScrollView h="430px" m="10px">
-          {documents.map((obj) => {
+          {documents.map((obj, index) => {
             return (
-              <Button
-                key={obj.key}
-                variant="link"
-                onPress={() => {
-                  handleDocsNav(obj.title);
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingLeft: "50px",
                 }}
               >
-                <ButtonText>{obj.title}</ButtonText>
-              </Button>
+                <Button
+                  key={obj.key}
+                  variant="link"
+                  onPress={() => {
+                    handleDocsNav(obj.title);
+                  }}
+                >
+                  <ButtonText>{obj.title}</ButtonText>
+                </Button>
+                <Button action="negative" variant="link">
+                  <ButtonText>Delete</ButtonText>
+                </Button>
+              </div>
             );
           })}
         </ScrollView>
