@@ -19,34 +19,86 @@ import {
   Button,
   ButtonText,
   ButtonIcon,
+  set,
 } from "@gluestack-ui/themed";
 import { config } from "../../../../../config/gluestack-ui.config";
 import { RiAddFill } from "react-icons/ri";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { showToast } from "../../../../utils/toasT";
+import { addTodoApi } from "../../../../apiFunc/todos";
+import { useLocalData } from "../../../../hooks/useLocalData";
+import { teamnames } from "../../../testdata/data";
 
-const projectList = ["Bhiutii", "Sadak Vision", "khai k view"];
+// const projectList = ["Bhiutii", "Sadak Vision", "khai k view"];
 const employeesList = ["Ram", "Shyam", "Hari", "Krishna"];
-const teamList = ["eh", "aur", "sac", "che", "go"];
+// const teamList = ["eh", "aur", "sac", "che", "go"];
 
-const taskPriorities = ["Urgent", "Not so Urgent", "Can skip"];
+const taskPriorities = [
+  { prId: 0, prName: "Can skip" },
+  { prId: 1, prName: "Not so Urgent" },
+  { prId: 2, prName: "Urgent" },
+];
 
 const Addtask = () => {
   const [details, setDetails] = useState({ taskTitle: "", taskDesc: "" });
   const [selectDetails, setSelectdetails] = useState({
-    teamName: "",
+    teamId: "",
     empName: "",
-    projectName: "",
-    taskPriority: "",
+    projectId: "",
+    taskPriority: 0,
   });
-  //prevent ssr
-  const [isMounted, setIsMounted] = useState(false);
+
+  const { authToken, isMounted, metaData } = useLocalData();
+  const [teams, setTeams] = useState([]);
+  const [buttonState, setButtonState] = useState(false);
+  const [defTeamValue, setdefTeamValue] = useState("none");
+
+  // getteammembersResponse jkdf = useQuery({
+  //   queryKey: ["users", { team: selectDetails.teamId }],
+  //   queryFn: () => {
+  //     getTeamMembersApi(authToken, { team: selectDetails.teamId });
+  //   },
+  //   enabled: !!selectDetails.teamId,
+  // });
+
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!isMounted) return;
+    if (isMounted == true && selectDetails.projectId !== "") {
+      const teamList = metaData.find(
+        (projectObj) => projectObj.project_id == selectDetails.projectId
+      ).teams;
+      setTeams(teamList);
+    }
+  }, [selectDetails.projectId]);
+
+  const addtaskResponse = useMutation({
+    mutationFn: (data) => {
+      addTodoApi(authToken, data);
+    },
+    onSuccess: () => {
+      showToast("Task Added Successfully", "success");
+      setSelectdetails({
+        teamId: "",
+        empName: "",
+        projectId: "",
+        taskPriority: "",
+      });
+      setDetails({ taskTitle: "", taskDesc: "" });
+    },
+  });
 
   const handleAddtask = () => {
-    console.log(details, selectDetails);
+    const data = {
+      team: Number(selectDetails.teamId),
+      title: details.taskTitle,
+      body: details.taskDesc,
+      status: 0,
+      priority: Number(selectDetails.taskPriority),
+      assigned_to: "username",
+    };
+    console.log(data);
   };
+
+  if (!isMounted) return;
 
   return (
     <>
@@ -86,21 +138,25 @@ const Addtask = () => {
                         name="projectName"
                         id="pname"
                         className="selectlist"
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setSelectdetails({
                             ...selectDetails,
-                            projectName: e.target.value,
-                          })
-                        }
+                            projectId: e.target.value,
+                          });
+                          setdefTeamValue("none");
+                        }}
                         defaultValue="none"
                       >
                         <option value="none" disabled hidden>
                           Select an Option
                         </option>
-                        {projectList.map((element, index) => {
+                        {metaData.map((element) => {
                           return (
-                            <option value={element} key={index}>
-                              {element}
+                            <option
+                              value={element.project_id}
+                              key={element.project_id}
+                            >
+                              {element.project_name}
                             </option>
                           );
                         })}
@@ -139,21 +195,22 @@ const Addtask = () => {
                           name="teamName"
                           id="tname"
                           className="selectlist"
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setSelectdetails({
                               ...selectDetails,
-                              teamName: e.target.value,
-                            })
-                          }
-                          defaultValue="none"
+                              teamId: e.target.value,
+                            });
+                            setdefTeamValue(e.target.value);
+                          }}
+                          value={defTeamValue}
                         >
                           <option value="none" disabled hidden>
                             Select an Option
                           </option>
-                          {teamList.map((element, index) => {
+                          {teams.map((element) => {
                             return (
-                              <option value={element} key={index}>
-                                {element}
+                              <option value={element.id} key={element.id}>
+                                {element.name}
                               </option>
                             );
                           })}
@@ -176,17 +233,17 @@ const Addtask = () => {
                           <option value="none" disabled hidden>
                             Select an Option
                           </option>
-                          {taskPriorities.map((element, index) => {
+                          {taskPriorities.map((element) => {
                             return (
-                              <option value={element} key={index}>
-                                {element}
+                              <option value={element.prId} key={element.prId}>
+                                {element.prName}
                               </option>
                             );
                           })}
                         </select>
                       </VStack>
                     </HStack>
-                    <Button onPress={handleAddtask}>
+                    <Button onPress={handleAddtask} isDisabled={buttonState}>
                       <ButtonText>Add Task</ButtonText>
                       <ButtonIcon>
                         <RiAddFill />

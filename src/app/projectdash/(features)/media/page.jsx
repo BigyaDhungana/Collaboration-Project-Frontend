@@ -20,43 +20,59 @@ import Headerbar from "../../../maindash/components/header";
 import VNavbar from "../../components/vNavbar";
 import { FiUpload } from "react-icons/fi";
 import { AiFillFileImage } from "react-icons/ai";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { showToast } from "../../../../utils/toasT";
+import { useLocalData } from "../../../../hooks/useLocalData";
+import { getMediaListApi, uploadMediaApi } from "../../../../apiFunc/media";
 
 const projectList = ["help", "I", "have", "lost", "my mind"];
 
 const Media = () => {
+  const queryClient = useQueryClient();
+  const { authToken, isMounted, metaData } = useLocalData();
+
   const [file, setFile] = useState(null);
+  const [selectedProjectId, setSelectedProjectId] = useState("");
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  if (!isMounted) return;
+  // const uploadmediaResponse = useMutation({
+  //   mutationFn: (data) => {
+  //     uploadMediaApi(authToken, data);
+  //   },
+  //   onSuccess: () => {
+  //     showToast("Image added successfully", "success");
+  //   },
+  //   onError: (error) => {
+  //     showToast(error.message, "error");
+  //   },
+  // });
 
-  // const response = await fetch(
-  //   "https://mocki.io/v1/4fecdb75-6ae1-4259-8b0b-47b60e037e21",
-  //   { cache: "no-cache" }
-  // );
-  // const data = await response.json();
-  // console.log(data);
+  // const getmedialistResponse = useQuery({
+  //   queryKey: ["media", selectedProjectId],
+  //   queryFn: () => getMediaListApi(token, selectedProjectId),
+  //   enabled: !!selectedProjectId,
+  // });
 
   const handleSelectChange = (e) => {
-    console.log(e.target.value);
+    setSelectedProjectId(e.target.value);
   };
 
   const handleUpload = () => {
     if (!file) {
-      alert("select a image");
+      showToast("select a image", "error");
+      return;
+    }
+    if (selectedProjectId === "") {
+      showToast("select a project", "error");
       return;
     }
 
-    const ext = file.name.split(".").pop();
-    alert(ext);
-
-    console.log("chalyo");
-
-    // const formData=FormData();
-    // formData.append("file",file)
+    const mediaFormData = new FormData();
+    mediaFormData.append("project", selectedProjectId);
+    mediaFormData.append("media", file);
+    // uploadmediaResponse.mutate(mediaFormData);
+    console.log("chalyo", selectedProjectId);
   };
+  if (!isMounted) return;
 
   return (
     <GluestackUIProvider config={config}>
@@ -82,10 +98,13 @@ const Media = () => {
                     <option value="none" disabled hidden>
                       Select an Option
                     </option>
-                    {projectList.map((element, index) => {
+                    {metaData.map((element) => {
                       return (
-                        <option value={element} key={index}>
-                          {element}
+                        <option
+                          value={element.project_id}
+                          key={element.project_id}
+                        >
+                          {element.project_name}
                         </option>
                       );
                     })}

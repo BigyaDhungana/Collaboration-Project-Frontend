@@ -37,32 +37,54 @@ import { toolbarPlugin } from "@mdxeditor/editor/plugins/toolbar";
 import { InsertImage } from "@mdxeditor/editor";
 import { linkPlugin } from "@mdxeditor/editor/plugins/link";
 import "../../../css/features.css";
-
+import { useMutation } from "@tanstack/react-query";
+import { uploadDocumentApi } from "../../../../../apiFunc/documents";
+import { showToast } from "../../../../../utils/toasT";
+import { useLocalData } from "../../../../../hooks/useLocalData";
 //test
 const projList = ["ine", "teo", "three", "four", "five"];
 
 const Createdoc = () => {
   const route = useRouter();
   const ref = useRef();
-  const editor = useEditor({
-    extensions: [StarterKit, Markdown],
-    content: "Remove this and start writing 👍",
+  const { authToken, metaData, isMounted } = useLocalData();
+
+  const uploaddocResponse = useMutation({
+    mutationFn: (data) => {
+      uploadDocumentApi(authToken, data);
+    },
+    onSuccess: () => {
+      showToast("Document uploaded successfully", "success");
+      route.push("/projectdash/documentation");
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
   });
 
   const [title, setTitle] = useState("");
-  const [project, setProject] = useState("");
+  const [projectId, setProjectId] = useState("");
 
   const handleSave = () => {
     const markdownOutput = ref.current?.getMarkdown();
 
-    if (title == "" || markdownOutput == "" || project == "") {
-      alert("Fill all the fields");
+    if (title == "" || markdownOutput == "" || projectId == "") {
+      showToast("Please fill all the fields", "error");
     } else {
-      console.log(markdownOutput, title, project);
-      alert("saved");
-      route.push("/projectdash/documentation");
+      // console.log(markdownOutput, title, project);
+      const data = {
+        project: Number(projectId),
+        title: title,
+        body: markdownOutput,
+      };
+      uploaddocResponse.mutate(data);
+      // console.log(data);
     }
   };
+
+  if (!isMounted) {
+    return;
+  }
 
   return (
     <div className="cdocs-main">
@@ -74,16 +96,16 @@ const Createdoc = () => {
           defaultValue="none"
           className="selectlist"
           onChange={(e) => {
-            setProject(e.target.value);
+            setProjectId(e.target.value);
           }}
         >
           <option value="none" disabled hidden>
             Select a project
           </option>
-          {projList.map((element, index) => {
+          {metaData.map((element) => {
             return (
-              <option value={element} key={index}>
-                {element}
+              <option value={element.project_id} key={element.project_id}>
+                {element.project_name}
               </option>
             );
           })}
@@ -110,7 +132,7 @@ const Createdoc = () => {
 
           <MDXEditor
             ref={ref}
-            markdown="remove this and start writing"
+            markdown="remove this and start writing👍"
             plugins={[
               toolbarPlugin({
                 toolbarContents: () => <ToolBar></ToolBar>,

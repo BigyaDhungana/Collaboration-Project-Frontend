@@ -20,26 +20,41 @@ import { useRouter } from "next/navigation";
 import { documents } from "../../../testdata/data";
 import { queryParamGenerator } from "../../../../utils/querypara";
 import { getDocumentListApi } from "../../../../apiFunc/documents";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalData } from "../../../../hooks/useLocalData";
+import { showToast } from "../../../../utils/toasT";
 //test
 const projList = ["ine", "teo", "three", "four", "five"];
 
 const Documentation = () => {
+  const queryClient=useQueryClient();
   const router = useRouter();
-  const {authToken,isMounted}=useLocalData()
-  // const docListResponse = useQuery({
-  //   queryKey: ["doclist"],
-  //   queryFn: () => getDocumentListApi(authToken),
-  //   enabled:isMounted,
-  // });
+  const { authToken, isMounted, metaData } = useLocalData();
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
 
-  //prevent ssr
-  // const [isMounted, setIsMounted] = useState(false);
-  // useEffect(() => {
-  //   setIsMounted(true);
-  // }, []);
-  // if (!isMounted) return;
+  // const docListResponse = useQuery({
+  //   queryKey: ["doclist", { project: Number(selectedProjectId) }],
+  //   queryFn: () =>
+  //     getDocumentListApi(authToken, { project: Number(selectedProjectId) }),
+  //   enabled: !!selectedProjectId,
+  // });
+  // if (docListResponse.isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+  // if (docListResponse.isError) {
+  //   return <div>Error</div>;
+  // }
+
+// const deletedocResponse=useMutation({
+//   mutationFn:(id)=>{deleteDocumentApi(authToken,{document:id})},
+//   onSuccess:()=>{
+//     showToast("Document deleted successfully","success")
+//     queryClient.invalidateQueries("doclist");
+//   },
+//   onError:()=>{
+//     showToast("Error deleting document","error");
+//   }
+// })
 
   const handleDocsNav = (docname) => {
     router.push(
@@ -55,10 +70,14 @@ const Documentation = () => {
 
   const handleProjectSelection = (e) => {
     console.log(e.target.value);
+    setSelectedProjectId(e.target.value);
   };
-  // if (!isMounted) {
-  //   return;
-  // }
+
+  // console.log(docListResponse.data);
+
+  if (!isMounted) {
+    return;
+  }
   return (
     <Box w="80%">
       <Center>
@@ -76,10 +95,10 @@ const Documentation = () => {
             <option value="none" disabled hidden>
               Select a project
             </option>
-            {projList.map((element, index) => {
+            {metaData.map((element) => {
               return (
-                <option value={element} key={index}>
-                  {element}
+                <option value={element.project_id} key={element.project_id}>
+                  {element.project_id}
                 </option>
               );
             })}

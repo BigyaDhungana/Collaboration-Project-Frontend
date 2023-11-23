@@ -9,35 +9,51 @@ import { TiTick } from "react-icons/ti";
 
 //
 import image from "../../../../../../public/download.jpeg";
-import { icons } from "react-icons";
+import { useMutation } from "@tanstack/react-query";
+import { showToast } from "../../../../../utils/toasT";
 
-const Mediadiv = ({ url, alt }) => {
+const Mediadiv = ({ url, alt, id }) => {
   const [copyPressed, setCopyPressed] = useState(false);
+
+  const deletemediaResponse = useMutation({
+    mutationFn: () => {
+      deleteMediaApi(authToken, { media: id });
+    },
+    onSuccess: () => {
+      showToast("Image deleted successfully", "success");
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
+  });
 
   const handleCopy = () => {
     setCopyPressed(true);
-    navigator.clipboard.writeText(url);
+    navigator.clipboard.writeText("huthuth");
     setTimeout(() => {
       setCopyPressed(false);
     }, 1000);
   };
 
   const handleDelete = () => {
-    console.log("api call");
+    // deletemediaResponse.mutate();
+    console.log(id);
   };
 
   return (
     <>
       <div className="mediaContainer">
         <div className="mediaImageC">
-          <Image
-            src={image}
-            alt="ds"
-            width={200}
-            height={200}
-            className="mediaImage"
-          ></Image>
-        </div>
+          <a href="https://gluestack.io/ui/docs/components/forms/button" target="blank" className="imageLink">
+            <Image
+              src={image}
+              alt="ds"
+              width={200}
+              height={200}
+              className="mediaImage"
+            ></Image>
+          </a>
+        </div> 
         <div className="mediaButtonsdiv">
           <Button onPress={handleCopy} size="sm">
             <ButtonIcon>
@@ -45,12 +61,13 @@ const Mediadiv = ({ url, alt }) => {
               {/* <MdOutlineContentCopy /> */}
             </ButtonIcon>
           </Button>
-          <Button onPress={handleDelete} size="sm">
+          <Button onPress={handleDelete} size="sm" action="negative">
             <ButtonIcon>
               <RiDeleteBinLine />
             </ButtonIcon>
           </Button>
         </div>
+        
       </div>
     </>
   );
