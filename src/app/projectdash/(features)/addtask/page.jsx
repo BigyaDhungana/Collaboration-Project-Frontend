@@ -54,15 +54,13 @@ const Addtask = () => {
   const [buttonState, setButtonState] = useState(false);
   const [defTeamValue, setdefTeamValue] = useState("none");
   const [employeeList, setEmployeeList] = useState([]);
+  const [empValue, setEmpValue] = useState("none");
 
-  const getteammembersResponse = useQuery({
-    queryKey: ["users", "2"],
-    queryFn: () => {
-      getTeamMembersApi(authToken, { team: "9" });
-    },
-    enabled: isMounted,
+  const getTeamMembersResponse = useQuery({
+    queryKey: ["teammembers", { team: Number(selectDetails.teamId) }],
+    queryFn: () => getTeamMembersApi(authToken, { team: selectDetails.teamId }),
+    enabled: defTeamValue !== "none",
   });
-  // console.log(getteammembersResponse);
 
   useEffect(() => {
     if (isMounted == true && selectDetails.projectId !== "") {
@@ -73,9 +71,11 @@ const Addtask = () => {
     }
   }, [selectDetails.projectId]);
 
-  // useEffect(()=>{
-  //   setEmployeeList(getteammembersResponse);
-  // },[selectDetails.teamId])
+  useEffect(() => {
+    if (getTeamMembersResponse.data) {
+      setEmployeeList(getTeamMembersResponse.data);
+    }
+  }, [getTeamMembersResponse.data]);
 
   const addtaskResponse = useMutation({
     mutationFn: (data) => {
@@ -87,7 +87,7 @@ const Addtask = () => {
         teamId: "",
         empName: "",
         projectId: "",
-        taskPriority: "",
+        taskPriority: 0,
       });
       setDetails({ taskTitle: "", taskDesc: "" });
     },
@@ -103,9 +103,10 @@ const Addtask = () => {
       body: details.taskDesc,
       status: 0,
       priority: Number(selectDetails.taskPriority),
-      assigned_to: "username",
+      assigned_to: selectDetails.empName,
     };
-    console.log(data);
+    // console.log(data);
+    addtaskResponse.mutate(data);
   };
 
   if (!isMounted) return;
@@ -154,6 +155,7 @@ const Addtask = () => {
                             projectId: e.target.value,
                           });
                           setdefTeamValue("none");
+                          setEmpValue("none");
                         }}
                         defaultValue="none"
                       >
@@ -179,21 +181,22 @@ const Addtask = () => {
                           name="employeeName"
                           id="ename"
                           className="selectlist"
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setSelectdetails({
                               ...selectDetails,
                               empName: e.target.value,
-                            })
-                          }
-                          defaultValue="none"
+                            });
+                            setEmpValue(e.target.value);
+                          }}
+                          value={empValue}
                         >
                           <option value="none" disabled hidden>
                             Select an Option
                           </option>
-                          {employeeList.map((element, index) => {
+                          {employeeList.map((empObj) => {
                             return (
-                              <option value={element} key={index}>
-                                {element}
+                              <option value={empObj.name} key={empObj.id}>
+                                {empObj.username}
                               </option>
                             );
                           })}
@@ -211,6 +214,7 @@ const Addtask = () => {
                               teamId: e.target.value,
                             });
                             setdefTeamValue(e.target.value);
+                            setEmpValue("none");
                           }}
                           value={defTeamValue}
                         >
@@ -219,7 +223,11 @@ const Addtask = () => {
                           </option>
                           {teams.map((element) => {
                             return (
-                              <option value={element.id} key={element.id}>
+                              <option
+                                value={element.id}
+                                key={element.id}
+                                disabled={!element.isLead}
+                              >
                                 {element.name}
                               </option>
                             );

@@ -37,9 +37,10 @@ const Documentation = () => {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [doclist, setDoclist] = useState([]);
   const [projValue, setProjValue] = useState("none");
+  const [update, setUpdate] = useState(false);
 
   const docListResponse = useQuery({
-    queryKey: ["doclist", { project: Number(selectedProjectId) }],
+    queryKey: ["doclist", { project: Number(selectedProjectId) }, update],
     queryFn: () =>
       getDocumentListApi(authToken, { project: Number(selectedProjectId) }),
     enabled: !!selectedProjectId,
@@ -48,7 +49,6 @@ const Documentation = () => {
   useEffect(() => {
     if (docListResponse.data) {
       setDoclist(docListResponse.data);
-      // console.log(docListResponse.data, "data");
     }
   }, [docListResponse.data]);
 
@@ -57,8 +57,9 @@ const Documentation = () => {
       deleteDocumentApi(authToken, { document: id });
     },
     onSuccess: () => {
-      docListResponse.refetch();
       showToast("Document deleted successfully", "success");
+      setUpdate(!update);
+      docListResponse.refetch();
     },
     onError: () => {
       showToast("Error deleting document", "error");

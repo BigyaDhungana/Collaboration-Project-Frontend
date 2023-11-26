@@ -11,7 +11,7 @@ export const getTodoListApi = async (token, data) => {
 };
 
 export const addTodoApi = async (token, data) => {
-  const response = await axios.post(uri, data, {
+  const response = await axios.post(url, data, {
     headers: { Authorization: `Token ${token}` },
   });
   return response;

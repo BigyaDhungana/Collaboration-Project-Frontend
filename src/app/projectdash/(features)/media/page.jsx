@@ -28,49 +28,64 @@ import { getMediaListApi, uploadMediaApi } from "../../../../apiFunc/media";
 const projectList = ["help", "I", "have", "lost", "my mind"];
 
 const Media = () => {
-  const queryClient = useQueryClient();
   const { authToken, isMounted, metaData } = useLocalData();
+  const queryClient = useQueryClient();
 
   const [file, setFile] = useState(null);
-  const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [dataArray, setDataArray] = useState([]);
+  const [update, setUpdate] = useState(false);
 
-  // const uploadmediaResponse = useMutation({
-  //   mutationFn: (data) => {
-  //     uploadMediaApi(authToken, data);
-  //   },
-  //   onSuccess: () => {
-  //     showToast("Image added successfully", "success");
-  //   },
-  //   onError: (error) => {
-  //     showToast(error.message, "error");
-  //   },
-  // });
+  const getmedialistResponse = useQuery({
+    queryKey: ["media", selectedProjectId, update],
+    queryFn: () =>
+      getMediaListApi(authToken, { project: Number(selectedProjectId) }),
+    enabled: !!selectedProjectId,
+  });
 
-  // const getmedialistResponse = useQuery({
-  //   queryKey: ["media", selectedProjectId],
-  //   queryFn: () => getMediaListApi(token, selectedProjectId),
-  //   enabled: !!selectedProjectId,
-  // });
+  const uploadmediaResponse = useMutation({
+    mutationFn: (data) => {
+      uploadMediaApi(authToken, data);
+    },
+    onSuccess: () => {
+      showToast("Image added successfully", "success");
+      getmedialistResponse.refetch();
+      setFile(null);
+      setUpdate(!update);
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
+  });
 
   const handleSelectChange = (e) => {
     setSelectedProjectId(e.target.value);
   };
+
+  useEffect(() => {
+    if (getmedialistResponse.data) {
+      setDataArray(getmedialistResponse.data);
+    }
+  }, [getmedialistResponse.data]);
+
+  useEffect(() => {}, [selectedProjectId]);
+
+  // console.log(file);
 
   const handleUpload = () => {
     if (!file) {
       showToast("select a image", "error");
       return;
     }
-    if (selectedProjectId === "") {
+    if (selectedProjectId === null) {
       showToast("select a project", "error");
       return;
     }
 
     const mediaFormData = new FormData();
     mediaFormData.append("project", selectedProjectId);
-    mediaFormData.append("media", file);
-    // uploadmediaResponse.mutate(mediaFormData);
-    console.log("chalyo", selectedProjectId);
+    mediaFormData.append("image", file);
+    uploadmediaResponse.mutate(mediaFormData);
   };
   if (!isMounted) return;
 
@@ -132,6 +147,7 @@ const Media = () => {
                       onChange={(e) => {
                         setFile(e.target.files[0]);
                       }}
+                      accept=".png, .jpg, .jpeg"
                     />
                     <Button size="xs" onPress={handleUpload}>
                       <ButtonText>Upload</ButtonText>
@@ -142,19 +158,9 @@ const Media = () => {
               <Divider m="5px"></Divider>
               <ScrollView h="500px">
                 <div className="media">
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
-                  <Mediadiv />
+                  {dataArray.map((imgObj) => {
+                    return <Mediadiv imgObj={imgObj} key={imgObj.id} func={setUpdate} query={getmedialistResponse} ivp={update}/>;
+                  })}
                 </div>
               </ScrollView>
             </Box>
