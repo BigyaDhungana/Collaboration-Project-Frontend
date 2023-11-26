@@ -6,7 +6,7 @@ export const getDocumentListApi = async (token, data) => {
   try {
     const response = await axios.get(url, {
       headers: { Authorization: `Token ${token}` },
-      params:data
+      params: data,
     });
     return response.data;
   } catch (error) {
@@ -21,10 +21,22 @@ export const uploadDocumentApi = async (token, data) => {
   return response;
 };
 
-export const deleteDocumentApi = async (token, docId) => {
+export const deleteDocumentApi = async (token, data) => {
   const response = await axios.delete(url, {
     headers: { Authorization: `Token ${token}` },
-    data: { document: docId },
+    data: data,
   });
   return response;
+};
+
+export const getDocumentBody = async (token, data) => {
+  try {
+    const response = await axios.get(url, {
+      headers: { Authorization: `Token ${token}` },
+      params: data,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };

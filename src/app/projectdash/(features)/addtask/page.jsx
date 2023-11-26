@@ -20,6 +20,7 @@ import {
   ButtonText,
   ButtonIcon,
   set,
+  get,
 } from "@gluestack-ui/themed";
 import { config } from "../../../../../config/gluestack-ui.config";
 import { RiAddFill } from "react-icons/ri";
@@ -27,10 +28,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { showToast } from "../../../../utils/toasT";
 import { addTodoApi } from "../../../../apiFunc/todos";
 import { useLocalData } from "../../../../hooks/useLocalData";
-import { teamnames } from "../../../testdata/data";
+import { getTeamMembersApi } from "../../../../apiFunc/teammembers";
 
 // const projectList = ["Bhiutii", "Sadak Vision", "khai k view"];
-const employeesList = ["Ram", "Shyam", "Hari", "Krishna"];
+// const employeesList = ["Ram", "Shyam", "Hari", "Krishna"];
 // const teamList = ["eh", "aur", "sac", "che", "go"];
 
 const taskPriorities = [
@@ -52,14 +53,16 @@ const Addtask = () => {
   const [teams, setTeams] = useState([]);
   const [buttonState, setButtonState] = useState(false);
   const [defTeamValue, setdefTeamValue] = useState("none");
+  const [employeeList, setEmployeeList] = useState([]);
 
-  // getteammembersResponse jkdf = useQuery({
-  //   queryKey: ["users", { team: selectDetails.teamId }],
-  //   queryFn: () => {
-  //     getTeamMembersApi(authToken, { team: selectDetails.teamId });
-  //   },
-  //   enabled: !!selectDetails.teamId,
-  // });
+  const getteammembersResponse = useQuery({
+    queryKey: ["users", "2"],
+    queryFn: () => {
+      getTeamMembersApi(authToken, { team: "9" });
+    },
+    enabled: isMounted,
+  });
+  // console.log(getteammembersResponse);
 
   useEffect(() => {
     if (isMounted == true && selectDetails.projectId !== "") {
@@ -69,6 +72,10 @@ const Addtask = () => {
       setTeams(teamList);
     }
   }, [selectDetails.projectId]);
+
+  // useEffect(()=>{
+  //   setEmployeeList(getteammembersResponse);
+  // },[selectDetails.teamId])
 
   const addtaskResponse = useMutation({
     mutationFn: (data) => {
@@ -83,6 +90,9 @@ const Addtask = () => {
         taskPriority: "",
       });
       setDetails({ taskTitle: "", taskDesc: "" });
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
     },
   });
 
@@ -180,7 +190,7 @@ const Addtask = () => {
                           <option value="none" disabled hidden>
                             Select an Option
                           </option>
-                          {employeesList.map((element, index) => {
+                          {employeeList.map((element, index) => {
                             return (
                               <option value={element} key={index}>
                                 {element}

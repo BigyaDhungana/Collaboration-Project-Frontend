@@ -14,12 +14,16 @@ import {
   Button,
   ButtonText,
   Text,
+  set,
 } from "@gluestack-ui/themed";
 import "../../css/features.css";
 import { useRouter } from "next/navigation";
 import { documents } from "../../../testdata/data";
 import { queryParamGenerator } from "../../../../utils/querypara";
-import { getDocumentListApi } from "../../../../apiFunc/documents";
+import {
+  getDocumentListApi,
+  deleteDocumentApi,
+} from "../../../../apiFunc/documents";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalData } from "../../../../hooks/useLocalData";
 import { showToast } from "../../../../utils/toasT";
@@ -27,40 +31,47 @@ import { showToast } from "../../../../utils/toasT";
 const projList = ["ine", "teo", "three", "four", "five"];
 
 const Documentation = () => {
-  const queryClient=useQueryClient();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { authToken, isMounted, metaData } = useLocalData();
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [doclist, setDoclist] = useState([]);
+  const [projValue, setProjValue] = useState("none");
 
-  // const docListResponse = useQuery({
-  //   queryKey: ["doclist", { project: Number(selectedProjectId) }],
-  //   queryFn: () =>
-  //     getDocumentListApi(authToken, { project: Number(selectedProjectId) }),
-  //   enabled: !!selectedProjectId,
-  // });
-  // if (docListResponse.isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (docListResponse.isError) {
-  //   return <div>Error</div>;
-  // }
+  const docListResponse = useQuery({
+    queryKey: ["doclist", { project: Number(selectedProjectId) }],
+    queryFn: () =>
+      getDocumentListApi(authToken, { project: Number(selectedProjectId) }),
+    enabled: !!selectedProjectId,
+  });
 
-// const deletedocResponse=useMutation({
-//   mutationFn:(id)=>{deleteDocumentApi(authToken,{document:id})},
-//   onSuccess:()=>{
-//     showToast("Document deleted successfully","success")
-//     queryClient.invalidateQueries("doclist");
-//   },
-//   onError:()=>{
-//     showToast("Error deleting document","error");
-//   }
-// })
+  useEffect(() => {
+    if (docListResponse.data) {
+      setDoclist(docListResponse.data);
+      // console.log(docListResponse.data, "data");
+    }
+  }, [docListResponse.data]);
 
-  const handleDocsNav = (docname) => {
+  const deletedocResponse = useMutation({
+    mutationFn: (id) => {
+      deleteDocumentApi(authToken, { document: id });
+    },
+    onSuccess: () => {
+      docListResponse.refetch();
+      showToast("Document deleted successfully", "success");
+    },
+    onError: () => {
+      showToast("Error deleting document", "error");
+    },
+  });
+
+  const handleDocsNav = (docId, docName) => {
     router.push(
       "/projectdash/documentation/viewdoc" +
         "?" +
-        queryParamGenerator("dtitle", docname)
+        queryParamGenerator("id", docId) +
+        "&" +
+        queryParamGenerator("title", docName)
     );
   };
 
@@ -68,16 +79,28 @@ const Documentation = () => {
     router.push("/projectdash/documentation/createdoc");
   };
 
+  const handleDelete = (id, name) => {
+    const userRes = prompt(`Are you sure you want to delete ${name} ?`, "YES");
+    if (userRes === "YES") {
+      deletedocResponse.mutate(id);
+    }
+  };
+
   const handleProjectSelection = (e) => {
     console.log(e.target.value);
     setSelectedProjectId(e.target.value);
+    setProjValue(e.target.value);
   };
-
-  // console.log(docListResponse.data);
-
+  if (docListResponse.isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (docListResponse.isError) {
+    return <div>Error</div>;
+  }
   if (!isMounted) {
     return;
   }
+
   return (
     <Box w="80%">
       <Center>
@@ -89,7 +112,7 @@ const Documentation = () => {
           <select
             name="selectProjectName"
             id="pname"
-            defaultValue="none"
+            value={projValue}
             onChange={handleProjectSelection}
           >
             <option value="none" disabled hidden>
@@ -98,7 +121,7 @@ const Documentation = () => {
             {metaData.map((element) => {
               return (
                 <option value={element.project_id} key={element.project_id}>
-                  {element.project_id}
+                  {element.project_name}
                 </option>
               );
             })}
@@ -106,7 +129,7 @@ const Documentation = () => {
         </HStack>
 
         <ScrollView h="430px" m="10px">
-          {documents.map((obj, index) => {
+          {doclist.map((doc) => {
             return (
               <div
                 style={{
@@ -114,17 +137,23 @@ const Documentation = () => {
                   justifyContent: "space-between",
                   paddingLeft: "50px",
                 }}
+                key={doc.id}
               >
                 <Button
-                  key={obj.key}
                   variant="link"
                   onPress={() => {
-                    handleDocsNav(obj.title);
+                    handleDocsNav(doc.id, doc.title);
                   }}
                 >
-                  <ButtonText>{obj.title}</ButtonText>
+                  <ButtonText>{doc?.title}</ButtonText>
                 </Button>
-                <Button action="negative" variant="link">
+                <Button
+                  action="negative"
+                  variant="link"
+                  onPress={() => {
+                    handleDelete(doc.id, doc.title);
+                  }}
+                >
                   <ButtonText>Delete</ButtonText>
                 </Button>
               </div>

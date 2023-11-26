@@ -13,32 +13,29 @@ import { useSearchParams } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalData } from "../../../../../hooks/useLocalData";
+import { getDocumentBody } from "../../../../../apiFunc/documents";
 
 const Viewdoc = () => {
+  const { authToken, isMounted } = useLocalData();
+
   const searchParam = useSearchParams();
-  const docName = searchParam.get("dtitle");
+  const docName = searchParam.get("title");
+  const docId = searchParam.get("id");
   const route = useRouter();
-  const markdown = `
- # heading 
 
-## sub
+  const documentBodyResponse = useQuery({
+    queryKey: ["documentBody", { document: docId }],
+    queryFn: () => getDocumentBody(authToken, { document: docId }),
+    enabled: isMounted,
+  });
+  console.log(documentBodyResponse.data, "data");
+  const markdown = documentBodyResponse.data?.body;
 
-- one
-- teo
-
-  *hello*
-
-  ## jkdfl
-
-  **jkfd**
-  ! [test](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT50hnwfx3suGC7Nhg1mTRdd1iPkFXI4eJBN8IrkAtu-w&s)
-
-  ![Alt text](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr5Y-TkjeRslcBNc6Ry0FznitnCZdiB3Duc8Xm2rDGnJdWNg13nZbHvRjeyyW-N4hW3_E&usqp=CAU "a title")
-`;
-
-    const handdleGoBack=()=>{
-        route.push("/projectdash/documentation")
-    }
+  const handdleGoBack = () => {
+    route.push("/projectdash/documentation");
+  };
 
   return (
     <Box w="80%">
