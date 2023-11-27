@@ -10,7 +10,7 @@ import { config } from "../../../../config/gluestack-ui.config";
 
 import "../css/style.css"
 
-const Stable = ({ list, sWidth = "61.25rem" }) => {
+const Stable = ({ todosList, sWidth = "61.25rem" }) => {
   return (
     <GluestackUIProvider config={config}>
       <Box borderWidth="0.5px" ml="5px" mr="5px" mt="15px" p="5px" mb="5px">
@@ -29,14 +29,14 @@ const Stable = ({ list, sWidth = "61.25rem" }) => {
         <ScrollView h="220px" w={sWidth}>
           <table>
             <tbody>
-              {list.map((element, index) => {
+              {todosList.map((todoObj) => {
                 return (
-                  <tr key={index}>
+                  <tr key={todoObj.id}>
                     <td className="tname">
-                      <Text>{element}</Text>
+                      <Text>{todoObj.title}</Text>
                     </td>
-                    <td className="project">TODO</td>
-                    <td className="status">tbd</td>
+                    <td className="project">{todoObj.project}</td>
+                    <td className="status">{todoObj.status}</td>
                   </tr>
                 );
               })}

@@ -33,15 +33,15 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   //   return params.toString();
   // };
 
-  const handleButton = (elementName,title=undefined,body=undefined) => {
+  const handleButton = (elementName, title = undefined, body = undefined) => {
     if (route != "none") {
       router.push(route + "?" + queryParamGenerator("pid", elementName));
     } else {
       // console.log(`not defined for news and notices btw ${elementName}`);
       setShowNews(true);
       setNews({
-        title:title,
-        content:body,
+        title: title,
+        content: body,
       });
     }
   };
@@ -70,43 +70,64 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
               );
             } else {
               return (
-                <div
-                  key={element.id}
-                  style={{
-                    display: "flex",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                >
-                  <Button
-                    mb="2px"
-                    variant="link"
-                    // onPress={() => {
-                    //   handleButton(element.title);
-                    // }}
-                    isDisabled={true}
-                    w="60%"
-                    sx={{
-                      ":disabled": {
-                        opacity: 1,
-                      },
-                    }}
-                    action="secondary"
-                  >
-                    <ButtonText> {element.project} :</ButtonText>
-                  </Button>
-                  <Box></Box>
-
-                  <Button
-                    mb="2px"
-                    variant="link"
-                    onPress={() => {
-                      handleButton(element.id,element.title,element.body);
-                    }}
-                  >
-                    <ButtonText>{element.title}</ButtonText>
-                  </Button>
-                </div>
+                <table key={element.id}>
+                  <tbody>
+                    <tr>
+                      <td style={{ width: "33%", textAlign: "center" }}>
+                        <Button
+                          mb="2px"
+                          variant="link"
+                          // onPress={() => {
+                          //   handleButton(element.title);
+                          // }}
+                          isDisabled={true}
+                          w="60%"
+                          sx={{
+                            ":disabled": {
+                              opacity: 1,
+                            },
+                          }}
+                          action="secondary"
+                        >
+                          <ButtonText> {element.project} :</ButtonText>
+                        </Button>
+                      </td>
+                      <td style={{ width: "33%", textAlign: "center" }}>
+                        <Button
+                          mb="2px"
+                          variant="link"
+                          onPress={() => {
+                            handleButton(
+                              element.id,
+                              element.title,
+                              element.body
+                            );
+                          }}
+                        >
+                          <ButtonText>{element.title}</ButtonText>
+                        </Button>
+                      </td>
+                      <td style={{ width: "20%", textAlign: "center" }}>
+                        <Button
+                          mb="2px"
+                          variant="link"
+                          isDisabled={true}
+                          w="60%"
+                          sx={{
+                            ":disabled": {
+                              opacity: 1,
+                            },
+                          }}
+                          action="secondary"
+                        >
+                          <ButtonText>
+                            {element.created_at.slice(0, 10)}{" "}
+                          </ButtonText>
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               );
             }
           })}

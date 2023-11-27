@@ -62,7 +62,7 @@ const Dashboard = () => {
             title="Announcements"
             list={dashResponse.data.announcements}
           />
-          <Stable list={tasks}></Stable>
+          <Stable todosList={dashResponse.data.todos}></Stable>
         </VStack>
       </HStack>
     </>
