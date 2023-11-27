@@ -7,7 +7,7 @@ const ProjectHeader = ({ initialProjectId, func, metaDatalist }) => {
   const [teamId, setTeamId] = useState(
     metaDatalist.find((project) => project.project_id == projectId).teams[0].id
   );
-  // console.log(metaDatalist);
+
   const selectHandler = (e) => {
     if (e.target.name == "projectnameid") {
       setProjectId(e.target.value);
@@ -17,19 +17,19 @@ const ProjectHeader = ({ initialProjectId, func, metaDatalist }) => {
   };
 
   useEffect(() => {
-    const temp = metaDatalist.find((project) => project.project_id == projectId)
-      .teams[0].id;
-    setTeamId(temp);
-    func(projectId, teamId);
-    // console.log(teamId);
-  }, [projectId, teamId]);
-  // console.log(
-  //   metaDatalist.find((projectObj) => projectObj.project_id == initialProjectId)
-  //     .project_name
-  // );
-  //variables
-  //projectName->selected project name
-  //teamName->selected team  name
+    // const temp = metaDatalist.find((project) => project.project_id == projectId)
+    //   .teams[0].id;
+    // setTeamId(temp);
+    func(teamId);
+    // console.log("team", teamId);
+  }, [teamId]);
+
+  useEffect(() => {
+    setTeamId(
+      metaDatalist.find((project) => project.project_id == projectId).teams[0]
+        .id
+    );
+  }, [projectId]);
 
   return (
     <div
@@ -67,7 +67,7 @@ const ProjectHeader = ({ initialProjectId, func, metaDatalist }) => {
           name="teamnameid"
           id="tname"
           onChange={selectHandler}
-          defaultValue={teamId}
+          value={teamId}
         >
           {metaDatalist
             .find((project) => project.project_id == projectId)

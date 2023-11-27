@@ -9,11 +9,10 @@ import {
   HStack,
 } from "@gluestack-ui/themed";
 import { config } from "../../../../config/gluestack-ui.config";
-import { todos } from "../../testdata/data";
+
 import Task from "./task";
 
-
-const Scrollbox = ({ title,children }) => {
+const Scrollbox = ({ title, children, list }) => {
   return (
     <GluestackUIProvider config={config}>
       <Box borderWidth="0.5px" m="15px" p="5px" w="380px" ml="5px">
@@ -24,11 +23,9 @@ const Scrollbox = ({ title,children }) => {
           </HStack>
         </Center>
         <ScrollView h="450px" p="10px" pt="0px">
-          {todos.map((todo, index) => {
+          {list.map((element) => {
             return (
-              <Task key={index} task={todo} taskType={title}>
-                {todo}
-              </Task>
+              <Task key={element.id} task={element} taskType={title}></Task>
             );
           })}
         </ScrollView>

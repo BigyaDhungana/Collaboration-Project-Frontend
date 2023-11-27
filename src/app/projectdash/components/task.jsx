@@ -16,10 +16,28 @@ import { MdOutlineDocumentScanner } from "react-icons/md";
 import { LuListTodo } from "react-icons/lu";
 import { TbProgress } from "react-icons/tb";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
+import { useMutation } from "@tanstack/react-query";
+import { useLocalData } from "../../../hooks/useLocalData";
+import { showToast } from "../../../utils/toasT";
+import { updataTodoApi } from "../../../apiFunc/todos";
 
 const Task = ({ task, taskType }) => {
   const [showModal, setShowModal] = useState(false);
-  const [dtask, setdTask] = useState({ taskTitle: "", taskDesc: "" });
+  const { authToken, isMounted, metaData } = useLocalData();
+
+  const updateTodoResponse = useMutation({
+    mutationFn: (statusId) =>
+      updataTodoApi(authToken, {
+        todo: Number(task.id),
+        status: Number(statusId),
+      }),
+    onSuccess: () => {
+      showToast("Task updated", "success");
+    },
+    onError: () => {
+      showToast("Task update failed", "error");
+    },
+  });
 
   const buttonState = {
     todo: taskType === "TODO",
@@ -27,13 +45,17 @@ const Task = ({ task, taskType }) => {
     completed: taskType === "Completed",
   };
 
-  const handleButtonpress = (taskName, taskDestination) => {
-    console.log(`${taskName} moved from ${taskType} to ${taskDestination}`);
+  const handleButtonpress = (taskDestination) => {
+    if (taskDestination === "todo") {
+      updateTodoResponse.mutate(0);
+    } else if (taskDestination === "inProgress") {
+      updateTodoResponse.mutate(1);
+    } else if (taskDestination === "completed") {
+      updateTodoResponse.mutate(2);
+    }
   };
 
   const handleDesc = (taskName) => {
-    //fetch task desc
-    setdTask({ taskTitle: taskName, taskDesc: "test" });
     setShowModal(true);
   };
 
@@ -41,7 +63,7 @@ const Task = ({ task, taskType }) => {
     <>
       <div className="task-container">
         <div className="task-text">
-          <Text size="lg">{task}</Text>
+          <Text size="lg">{task.title}</Text>
         </div>
         <div className="task-icons">
           <div className="btn">
@@ -64,7 +86,7 @@ const Task = ({ task, taskType }) => {
               action="positive"
               isDisabled={buttonState.todo}
               onPress={() => {
-                handleButtonpress(task, "todo");
+                handleButtonpress("todo");
               }}
               size="sm"
             >
@@ -81,7 +103,7 @@ const Task = ({ task, taskType }) => {
               action="positive"
               isDisabled={buttonState.inProgress}
               onPress={() => {
-                handleButtonpress(task, "inProgress");
+                handleButtonpress("inProgress");
               }}
               size="sm"
             >
@@ -98,7 +120,7 @@ const Task = ({ task, taskType }) => {
               action="positive"
               isDisabled={buttonState.completed}
               onPress={() => {
-                handleButtonpress(task, "completed");
+                handleButtonpress("completed");
               }}
               size="sm"
             >
@@ -118,9 +140,9 @@ const Task = ({ task, taskType }) => {
       >
         <ModalContent>
           <Center>
-            <ModalHeader>{dtask.taskTitle}</ModalHeader>
+            <ModalHeader>{task.title}</ModalHeader>
           </Center>
-          <ModalBody></ModalBody>
+          <ModalBody>{task.body}</ModalBody>
           <Center>
             <ModalFooter>
               <Button

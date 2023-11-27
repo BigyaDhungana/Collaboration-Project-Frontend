@@ -18,6 +18,9 @@ import { LuListTodo } from "react-icons/lu";
 import { TbProgress } from "react-icons/tb";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import { useLocalData } from "../../hooks/useLocalData";
+import { useQuery } from "@tanstack/react-query";
+import { getTodoListApi } from "../../apiFunc/todos";
+
 const ProjectDash = () => {
   //get query param
   const searchParam = useSearchParams();
@@ -25,24 +28,46 @@ const ProjectDash = () => {
   // console.log(pId);
   const { authToken, isMounted, metaData } = useLocalData();
 
-  const [sProjectId, setSprojectId] = useState("");
-  const [sTeamId, setSteamId] = useState("");
+  const [sTeamId, setSTeamId] = useState(null);
+  const [todos, setTodos] = useState([]);
+  const [inProgress, setInProgres] = useState([]);
+  const [completed, setCompleted] = useState([]);
 
-  //prevent ssr
-  // const [isMounted, setIsMounted] = useState(false);
-  // useEffect(() => {
-  //   setIsMounted(true);
-  // }, []);
-  if (!isMounted) return;
+  const getTodoListResponse = useQuery({
+    queryKey: ["gettodo", { team: sTeamId }],
+    queryFn: () => getTodoListApi(authToken, { team: sTeamId }),
+    enabled: sTeamId != null,
+  });
 
   //get data form component
-  const getProjTeamdata = (projname, teamname) => {
-    setSprojectId(projname);
-    setSteamId(teamname);
+  const getProjTeamdata = (teamId) => {
+    if (teamId != null) {
+      setSTeamId(teamId);
+    }
+    return;
   };
 
-  console.log(`selected project name=${sProjectId} \t
-  selected team name=${sTeamId}`);
+  useEffect(() => {}, [sTeamId]);
+
+  useEffect(() => {
+    if (getTodoListResponse.data != null) {
+      setTodos(
+        getTodoListResponse.data.filter((listObj) => listObj.status === "TODO")
+      );
+      setInProgres(
+        getTodoListResponse.data.filter(
+          (listObj) => listObj.status === "PROGRESS"
+        )
+      );
+      setCompleted(
+        getTodoListResponse.data.filter(
+          (listObj) => listObj.status === "COMPLETE"
+        )
+      );
+    }
+  }, [getTodoListResponse.data]);
+
+  if (!isMounted) return;
 
   return (
     <>
@@ -59,13 +84,13 @@ const ProjectDash = () => {
               />
             </Center>
             <HStack>
-              <Scrollbox title={"TODO"}>
+              <Scrollbox title={"TODO"} list={todos}>
                 <LuListTodo />
               </Scrollbox>
-              <Scrollbox title={"In Progress"}>
+              <Scrollbox title={"In Progress"} list={inProgress}>
                 <TbProgress />
               </Scrollbox>
-              <Scrollbox title={"Completed"}>
+              <Scrollbox title={"Completed"} list={completed}>
                 <IoCheckmarkDoneCircleOutline />
               </Scrollbox>
             </HStack>
