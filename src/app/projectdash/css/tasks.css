@@ -53,3 +53,11 @@
 .btn:hover .tooltiptext {
   visibility: visible;
 }
+
+.del{
+  display: flex;
+  justify-content: "flex-end";
+  width: 100%;
+  margin-right: 5rem;
+  flex-direction: row-reverse;
+}

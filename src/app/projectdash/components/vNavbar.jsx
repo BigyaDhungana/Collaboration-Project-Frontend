@@ -4,6 +4,8 @@ import "../css/index.css";
 import { dummyinfo } from "../../testdata/data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { queryParamGenerator } from "../../../utils/querypara";
+import { useLocalData } from "../../../hooks/useLocalData";
 
 const VNavbar = () => {
   const currentPath = usePathname();
@@ -11,20 +13,24 @@ const VNavbar = () => {
     tasks: "active",
     documentation: "",
     addtask: "",
-    media:"",
+    media: "",
   });
+
+  const { metaData, isMounted } = useLocalData();
+
   useEffect(() => {
     if (currentPath.includes("documentation")) {
-      setActive({ tasks: "", documentation: "active", addtask: "",media:"" });
+      setActive({ tasks: "", documentation: "active", addtask: "", media: "" });
     }
     if (currentPath.includes("addtask")) {
-      setActive({ tasks: "", documentation: "", addtask: "active",media:"" });
+      setActive({ tasks: "", documentation: "", addtask: "active", media: "" });
     }
     if (currentPath.includes("media")) {
       setActive({ tasks: "", documentation: "", addtask: "", media: "active" });
     }
- 
   }, []);
+
+  if (!isMounted) return null;
 
   return (
     <div
@@ -43,7 +49,10 @@ const VNavbar = () => {
           Dashboard
         </Link>
 
-        <Link href={"/projectdash"} className={`link ${active.tasks}`}>
+        <Link
+          href={`/projectdash?${queryParamGenerator("pid", metaData[0].project_id)}`}
+          className={`link ${active.tasks}`}
+        >
           Tasks
         </Link>
 
@@ -60,10 +69,7 @@ const VNavbar = () => {
         >
           Add Tasks
         </Link>
-        <Link
-          href={"/projectdash/media"}
-          className={`link ${active.media}`}
-        >
+        <Link href={"/projectdash/media"} className={`link ${active.media}`}>
           Media
         </Link>
       </div>

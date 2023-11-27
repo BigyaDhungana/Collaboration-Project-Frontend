@@ -20,10 +20,20 @@ import { useMutation } from "@tanstack/react-query";
 import { useLocalData } from "../../../hooks/useLocalData";
 import { showToast } from "../../../utils/toasT";
 import { updataTodoApi } from "../../../apiFunc/todos";
+import { MdOutlineDelete } from "react-icons/md";
 
-const Task = ({ task, taskType }) => {
+const Task = ({ task, taskType, refetchFunc, reload, setReload }) => {
   const [showModal, setShowModal] = useState(false);
   const { authToken, isMounted, metaData } = useLocalData();
+
+  // if (isMounted) {
+  //   for (let i=0;i<metaData.length;i++){
+  //     for (let j=0;j<metaData[i].teams.length;j++){
+  //       if (metaData[i].teams[j].id === task.team){
+  //         console.log(metaData[i].teams[j].isLead)
+  //       }
+  //     }
+  // } 
 
   const updateTodoResponse = useMutation({
     mutationFn: (statusId) =>
@@ -33,6 +43,8 @@ const Task = ({ task, taskType }) => {
       }),
     onSuccess: () => {
       showToast("Task updated", "success");
+      setReload(!reload);
+      refetchFunc.refetch();
     },
     onError: () => {
       showToast("Task update failed", "error");
@@ -141,6 +153,13 @@ const Task = ({ task, taskType }) => {
         <ModalContent>
           <Center>
             <ModalHeader>{task.title}</ModalHeader>
+            <div className="del">
+              <Button  action="negative">
+                <ButtonIcon>
+                  <MdOutlineDelete />
+                </ButtonIcon>
+              </Button>
+            </div>
           </Center>
           <ModalBody>{task.body}</ModalBody>
           <Center>
@@ -161,8 +180,8 @@ const Task = ({ task, taskType }) => {
   );
 };
 
+export default Task;
+
 const Tooltip = ({ tooltiptext }) => {
   return <span className="tooltiptext"> {tooltiptext}</span>;
 };
-
-export default Task;

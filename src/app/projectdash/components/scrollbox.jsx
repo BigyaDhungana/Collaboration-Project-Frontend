@@ -12,7 +12,14 @@ import { config } from "../../../../config/gluestack-ui.config";
 
 import Task from "./task";
 
-const Scrollbox = ({ title, children, list }) => {
+const Scrollbox = ({
+  title,
+  children,
+  list,
+  refetchFunc,
+  reload,
+  setReload,
+}) => {
   return (
     <GluestackUIProvider config={config}>
       <Box borderWidth="0.5px" m="15px" p="5px" w="380px" ml="5px">
@@ -25,7 +32,14 @@ const Scrollbox = ({ title, children, list }) => {
         <ScrollView h="450px" p="10px" pt="0px">
           {list.map((element) => {
             return (
-              <Task key={element.id} task={element} taskType={title}></Task>
+              <Task
+                key={element.id}
+                task={element}
+                taskType={title}
+                refetchFunc={refetchFunc}
+                reload={reload}
+                setReload={setReload}
+              ></Task>
             );
           })}
         </ScrollView>

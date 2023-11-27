@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import ProjectHeader from "./components/projectHeader";
 import VNavbar from "./components/vNavbar";
 import { useSearchParams } from "next/navigation";
@@ -32,9 +32,10 @@ const ProjectDash = () => {
   const [todos, setTodos] = useState([]);
   const [inProgress, setInProgres] = useState([]);
   const [completed, setCompleted] = useState([]);
+  const [reload, setReload] = useState(false);
 
   const getTodoListResponse = useQuery({
-    queryKey: ["gettodo", { team: sTeamId }],
+    queryKey: ["gettodo", { team: sTeamId }, reload],
     queryFn: () => getTodoListApi(authToken, { team: sTeamId }),
     enabled: sTeamId != null,
   });
@@ -84,13 +85,31 @@ const ProjectDash = () => {
               />
             </Center>
             <HStack>
-              <Scrollbox title={"TODO"} list={todos}>
+              <Scrollbox
+                title={"TODO"}
+                list={todos}
+                refetchFunc={getTodoListResponse}
+                reload={reload}
+                setReload={setReload}
+              >
                 <LuListTodo />
               </Scrollbox>
-              <Scrollbox title={"In Progress"} list={inProgress}>
+              <Scrollbox
+                title={"In Progress"}
+                list={inProgress}
+                refetchFunc={getTodoListResponse}
+                reload={reload}
+                setReload={setReload}
+              >
                 <TbProgress />
               </Scrollbox>
-              <Scrollbox title={"Completed"} list={completed}>
+              <Scrollbox
+                title={"Completed"}
+                list={completed}
+                refetchFunc={getTodoListResponse}
+                reload={reload}
+                setReload={setReload}
+              >
                 <IoCheckmarkDoneCircleOutline />
               </Scrollbox>
             </HStack>
