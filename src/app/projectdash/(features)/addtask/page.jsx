@@ -78,9 +78,7 @@ const Addtask = () => {
   }, [getTeamMembersResponse.data]);
 
   const addtaskResponse = useMutation({
-    mutationFn: (data) => {
-      addTodoApi(authToken, data);
-    },
+    mutationFn: (data) => addTodoApi(authToken, data),
     onSuccess: () => {
       showToast("Task Added Successfully", "success");
       setSelectdetails({
@@ -90,6 +88,8 @@ const Addtask = () => {
         taskPriority: 0,
       });
       setDetails({ taskTitle: "", taskDesc: "" });
+      setdefTeamValue("none");
+      setEmpValue("none");
     },
     onError: (error) => {
       showToast(error.message, "error");
