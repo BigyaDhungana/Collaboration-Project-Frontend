@@ -19,6 +19,7 @@ const Scrollbox = ({
   refetchFunc,
   reload,
   setReload,
+  teamId,
 }) => {
   return (
     <GluestackUIProvider config={config}>
@@ -29,7 +30,7 @@ const Scrollbox = ({
             <Heading>{children}</Heading>
           </HStack>
         </Center>
-        <ScrollView h="450px" p="10px" pt="0px">
+        <ScrollView h="390px" p="10px" pt="0px">
           {list.map((element) => {
             return (
               <Task
@@ -39,6 +40,7 @@ const Scrollbox = ({
                 refetchFunc={refetchFunc}
                 reload={reload}
                 setReload={setReload}
+                teamId={teamId}
               ></Task>
             );
           })}

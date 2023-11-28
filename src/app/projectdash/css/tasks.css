@@ -61,3 +61,14 @@
   margin-right: 5rem;
   flex-direction: row-reverse;
 }
+
+.assigenedto{
+  width: 100%;
+  display: flex;
+  background-color: white;
+  align-items: baseline;
+  position: relative;
+  top:10px;
+  left:100px;
+  margin: 3px;
+}

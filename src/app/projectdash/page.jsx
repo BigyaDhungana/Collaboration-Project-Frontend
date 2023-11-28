@@ -9,6 +9,8 @@ import {
   HStack,
   GluestackUIProvider,
   Center,
+  Switch,
+  get,
 } from "@gluestack-ui/themed";
 import { config } from "../../../config/gluestack-ui.config";
 import Scrollbox from "./components/scrollbox";
@@ -20,6 +22,8 @@ import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import { useLocalData } from "../../hooks/useLocalData";
 import { useQuery } from "@tanstack/react-query";
 import { getTodoListApi } from "../../apiFunc/todos";
+import { MdGroups2 } from "react-icons/md";
+import { FaUserAlt } from "react-icons/fa";
 
 const ProjectDash = () => {
   //get query param
@@ -84,6 +88,12 @@ const ProjectDash = () => {
                 metaDatalist={metaData}
               />
             </Center>
+            <Center>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <MdGroups2 size={30} /> <Switch />
+                <FaUserAlt />
+              </div>
+            </Center>
             <HStack>
               <Scrollbox
                 title={"TODO"}
@@ -91,6 +101,7 @@ const ProjectDash = () => {
                 refetchFunc={getTodoListResponse}
                 reload={reload}
                 setReload={setReload}
+                teamId={sTeamId}
               >
                 <LuListTodo />
               </Scrollbox>
@@ -100,6 +111,7 @@ const ProjectDash = () => {
                 refetchFunc={getTodoListResponse}
                 reload={reload}
                 setReload={setReload}
+                teamId={sTeamId}
               >
                 <TbProgress />
               </Scrollbox>
@@ -109,6 +121,7 @@ const ProjectDash = () => {
                 refetchFunc={getTodoListResponse}
                 reload={reload}
                 setReload={setReload}
+                teamId={sTeamId}
               >
                 <IoCheckmarkDoneCircleOutline />
               </Scrollbox>

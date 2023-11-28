@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/tasks.css";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   Text,
+  set,
 } from "@gluestack-ui/themed";
 import { MdOutlineDocumentScanner } from "react-icons/md";
 import { LuListTodo } from "react-icons/lu";
@@ -19,21 +20,15 @@ import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import { useMutation } from "@tanstack/react-query";
 import { useLocalData } from "../../../hooks/useLocalData";
 import { showToast } from "../../../utils/toasT";
-import { updataTodoApi } from "../../../apiFunc/todos";
+import { updataTodoApi, deleteTodoApi } from "../../../apiFunc/todos";
 import { MdOutlineDelete } from "react-icons/md";
 
-const Task = ({ task, taskType, refetchFunc, reload, setReload }) => {
+const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
   const [showModal, setShowModal] = useState(false);
   const { authToken, isMounted, metaData } = useLocalData();
+  const [team, setTeam] = useState(null);
 
-  // if (isMounted) {
-  //   for (let i=0;i<metaData.length;i++){
-  //     for (let j=0;j<metaData[i].teams.length;j++){
-  //       if (metaData[i].teams[j].id === task.team){
-  //         console.log(metaData[i].teams[j].isLead)
-  //       }
-  //     }
-  // } 
+  // console.log(team);
 
   const updateTodoResponse = useMutation({
     mutationFn: (statusId) =>
@@ -51,6 +46,28 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload }) => {
     },
   });
 
+  const deleteTodoResponse = useMutation({
+    mutationFn: () => deleteTodoApi(authToken, { todo: Number(task.id) }),
+    onSuccess: () => {
+      showToast("Task deleted", "success");
+      setReload(!reload);
+      refetchFunc.refetch();
+    },
+    onError: () => {
+      showToast("Task delete failed", "error");
+    },
+  });
+
+  useEffect(() => {
+    if (isMounted) {
+      const projectTeams = metaData.find(
+        (dataObj) => dataObj.project_id == task.project_id
+      );
+      const teams = projectTeams.teams.find((teamObj) => teamObj.id == teamId);
+      setTeam(teams);
+    }
+  }, [teamId]);
+
   const buttonState = {
     todo: taskType === "TODO",
     inProgress: taskType === "In Progress",
@@ -67,16 +84,28 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload }) => {
     }
   };
 
-  const handleDesc = (taskName) => {
+  const handleDesc = () => {
     setShowModal(true);
   };
+
+  const handleDelete = () => {
+    deleteTodoResponse.mutate();
+  };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <>
       <div className="task-container">
         <div className="task-text">
           <Text size="lg">{task.title}</Text>
+          <div className="assigenedto">
+            <Text size="xs">Assigned to: {task.assigned_to}</Text>
+          </div>
         </div>
+
         <div className="task-icons">
           <div className="btn">
             <Tooltip tooltiptext="task description" />
@@ -154,9 +183,13 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload }) => {
           <Center>
             <ModalHeader>{task.title}</ModalHeader>
             <div className="del">
-              <Button  action="negative">
+              <Button
+                action="negative"
+                isDisabled={!(team?.isLead || true)}
+                onPress={handleDelete}
+              >
                 <ButtonIcon>
-                  <MdOutlineDelete />
+                  <MdOutlineDelete size={20} />
                 </ButtonIcon>
               </Button>
             </div>
