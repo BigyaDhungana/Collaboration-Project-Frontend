@@ -24,12 +24,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { showToast } from "../../../../utils/toasT";
 import { useLocalData } from "../../../../hooks/useLocalData";
 import { getMediaListApi, uploadMediaApi } from "../../../../apiFunc/media";
+import { useRouter } from "next/navigation";
+import Loading from "../../../../components/loading";
 
 const projectList = ["help", "I", "have", "lost", "my mind"];
 
 const Media = () => {
+  const router = useRouter();
   const { authToken, isMounted, metaData } = useLocalData();
-  const queryClient = useQueryClient();
 
   const [file, setFile] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -87,6 +89,13 @@ const Media = () => {
     mediaFormData.append("image", file);
     uploadmediaResponse.mutate(mediaFormData);
   };
+
+  if (isMounted == true && authToken == null) {
+    showToast("user token expired", "error");
+    router.replace("/");
+    return <Loading text={"Please wait ..."} size={"large"} />;
+  }
+
   if (!isMounted) return;
 
   return (

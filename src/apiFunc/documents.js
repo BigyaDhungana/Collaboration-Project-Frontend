@@ -10,7 +10,7 @@ export const getDocumentListApi = async (token, data) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    return Promise.reject(new Error(error.response.status));
   }
 };
 
@@ -37,6 +37,6 @@ export const getDocumentBody = async (token, data) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    return Promise.reject(new Error(error.response.status));
   }
 };

@@ -2,7 +2,7 @@
 import { use, useEffect, useState } from "react";
 import ProjectHeader from "./components/projectHeader";
 import VNavbar from "./components/vNavbar";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Headerbar from "../maindash/components/header";
 import {
   VStack,
@@ -25,12 +25,13 @@ import { getTodoListApi } from "../../apiFunc/todos";
 import { MdGroups2 } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import Loading from "../../components/loading";
+import { showToast } from "../../utils/toasT";
 
 const ProjectDash = () => {
-  //get query param
+  const router = useRouter();
   const searchParam = useSearchParams();
   const pId = searchParam.get("pid");
-  // console.log(pId);
+
   const { authToken, isMounted, metaData, userDetails } = useLocalData();
 
   const [sTeamId, setSTeamId] = useState(null);
@@ -97,8 +98,20 @@ const ProjectDash = () => {
     }
   }, [getTodoListResponse.data, isUserOnly]);
 
-  // if (getTodoListResponse.isLoading)
-  //   return <Loading text={"Please wait"} size={"large"} />;
+  if (isMounted == true && authToken == null) {
+    showToast("user token expired", "error");
+    router.replace("/");
+    return <Loading text={"Please wait ..."} size={"large"} />;
+  }
+
+  if (getTodoListResponse.isError) {
+    if (getTodoListResponse.error.message == "401") {
+      showToast("user token expired", "error");
+      router.replace("/");
+      return <Loading text={"Please wait ..."} size={"large"} />;
+    }
+    return <Error status={getTodoListResponse.error.message} />;
+  }
 
   if (!isMounted) return;
 

@@ -10,14 +10,15 @@ import { useLocalData } from "../../hooks/useLocalData";
 import { dashboardApi } from "../../apiFunc/dashboard";
 import { metadataApi } from "../../apiFunc/users";
 import { savetoLocalStorage } from "../../utils/localstorage";
-
-//dummy
-import { news, tasks, dummyinfo, yourProjects, nws } from "../testdata/data";
+import Error from "../../components/error";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/loading";
+import { useRouter } from "next/navigation";
+import { showToast } from "../../utils/toasT";
 
 const Dashboard = () => {
   const { authToken, userDetails, isMounted } = useLocalData();
+  const router = useRouter();
 
   const dashResponse = useQuery({
     queryKey: ["dashboard"],
@@ -35,16 +36,36 @@ const Dashboard = () => {
     savetoLocalStorage("metadata", metadataResponse.data);
   }
 
+  if (isMounted == true && authToken == null) {
+    showToast("user token expired", "error");
+    router.replace("/");
+    return <Loading text={"Please wait ..."} size={"large"} />;
+  }
+
   if (!isMounted) {
     return <Loading text={"Loading page ..."} size={"large"} />;
   }
   if (dashResponse.isLoading || metadataResponse.isLoading) {
     return <Loading text={"Please wait ..."} size={"large"} />;
   }
-  if (dashResponse.isError || metadataResponse.isError) {
-    return <h1>err</h1>;
+  if (dashResponse.isError) {
+    if (dashResponse.error.message == "401") {
+      showToast("user token expired", "error");
+      router.replace("/");
+      return <Loading text={"Please wait ..."} size={"large"} />;
+    }
+    return <Error status={dashResponse.error.message} />;
   }
-  // console.log(metadataResponse.data)
+
+  if (metadataResponse.isError) {
+    if (dashResponse.error.message == "401") {
+      showToast("user token expired", "error");
+      router.push("/");
+      return <Loading text={"Please wait ..."} size={"large"} />;
+    }
+    return <Error status={dashResponse.error.message} />;
+  }
+
   return (
     <>
       <Headerbar />

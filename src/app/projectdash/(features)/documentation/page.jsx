@@ -27,7 +27,6 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalData } from "../../../../hooks/useLocalData";
 import { showToast } from "../../../../utils/toasT";
-import Loading from "../../../../components/loading";
 
 const Documentation = () => {
   const queryClient = useQueryClient();
@@ -92,6 +91,9 @@ const Documentation = () => {
     setProjValue(e.target.value);
   };
 
+  if (docListResponse.isLoading) {
+    return <div>Loading...</div>;
+  }
   if (docListResponse.isError) {
     return <div>Error</div>;
   }

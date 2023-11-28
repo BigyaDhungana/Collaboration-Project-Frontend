@@ -29,10 +29,8 @@ import { showToast } from "../../../../utils/toasT";
 import { addTodoApi } from "../../../../apiFunc/todos";
 import { useLocalData } from "../../../../hooks/useLocalData";
 import { getTeamMembersApi } from "../../../../apiFunc/teammembers";
-
-// const projectList = ["Bhiutii", "Sadak Vision", "khai k view"];
-// const employeesList = ["Ram", "Shyam", "Hari", "Krishna"];
-// const teamList = ["eh", "aur", "sac", "che", "go"];
+import Loading from "../../../../components/loading";
+import { useRouter } from "next/navigation";
 
 const taskPriorities = [
   { prId: 0, prName: "Can skip" },
@@ -41,6 +39,7 @@ const taskPriorities = [
 ];
 
 const Addtask = () => {
+  const router = useRouter();
   const [details, setDetails] = useState({ taskTitle: "", taskDesc: "" });
   const [selectDetails, setSelectdetails] = useState({
     teamId: "",
@@ -51,7 +50,6 @@ const Addtask = () => {
 
   const { authToken, isMounted, metaData } = useLocalData();
   const [teams, setTeams] = useState([]);
-  const [buttonState, setButtonState] = useState(false);
   const [defTeamValue, setdefTeamValue] = useState("none");
   const [employeeList, setEmployeeList] = useState([]);
   const [empValue, setEmpValue] = useState("none");
@@ -108,6 +106,12 @@ const Addtask = () => {
     // console.log(data);
     addtaskResponse.mutate(data);
   };
+
+  if (isMounted == true && authToken == null) {
+    showToast("user token expired", "error");
+    router.replace("/");
+    return <Loading text={"Please wait ..."} size={"large"} />;
+  }
 
   if (!isMounted) return;
 
@@ -261,7 +265,7 @@ const Addtask = () => {
                         </select>
                       </VStack>
                     </HStack>
-                    <Button onPress={handleAddtask} isDisabled={buttonState}>
+                    <Button onPress={handleAddtask}>
                       <ButtonText>Add Task</ButtonText>
                       <ButtonIcon>
                         <RiAddFill />
