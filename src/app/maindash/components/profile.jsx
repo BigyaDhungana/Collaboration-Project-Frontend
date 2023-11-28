@@ -140,7 +140,7 @@ const Profile = () => {
             </ModalHeader>
           </Center>
           <ModalBody>
-            <div style={{display:"flex",justifyContent:"space-evenly" }}>
+            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               <VStack space="xl">
                 <HStack>
                   <Text>Name :</Text>
@@ -155,18 +155,18 @@ const Profile = () => {
                   <Text> {username}</Text>
                 </HStack>
                 <HStack>
-                  <Text>User Id :</Text>
+                  <Text>Id :</Text>
                   <Text> {userID}</Text>
                 </HStack>
               </VStack>
-              
-       <Image
-       size="xl" borderRadius="$full" 
-         source={{
-            uri:`${process.env.NEXT_PUBLIC_API_URL}${profile_picture}`,
-          }}
-      />
-      
+
+              <Image
+                size="xl"
+                borderRadius="$full"
+                source={{
+                  uri: `${process.env.NEXT_PUBLIC_API_URL}${profile_picture}`,
+                }}
+              />
             </div>
           </ModalBody>
           <Center>

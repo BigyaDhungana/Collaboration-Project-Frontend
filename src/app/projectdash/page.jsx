@@ -30,13 +30,14 @@ const ProjectDash = () => {
   const searchParam = useSearchParams();
   const pId = searchParam.get("pid");
   // console.log(pId);
-  const { authToken, isMounted, metaData } = useLocalData();
+  const { authToken, isMounted, metaData, userDetails } = useLocalData();
 
   const [sTeamId, setSTeamId] = useState(null);
   const [todos, setTodos] = useState([]);
   const [inProgress, setInProgres] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [reload, setReload] = useState(false);
+  const [isUserOnly, setIsUserOnly] = useState(false);
 
   const getTodoListResponse = useQuery({
     queryKey: ["gettodo", { team: sTeamId }, reload],
@@ -55,7 +56,7 @@ const ProjectDash = () => {
   useEffect(() => {}, [sTeamId]);
 
   useEffect(() => {
-    if (getTodoListResponse.data != null) {
+    if (getTodoListResponse.data != null && isUserOnly === false) {
       setTodos(
         getTodoListResponse.data.filter((listObj) => listObj.status === "TODO")
       );
@@ -70,7 +71,32 @@ const ProjectDash = () => {
         )
       );
     }
-  }, [getTodoListResponse.data]);
+    if (getTodoListResponse.data != null && isUserOnly === true) {
+      setTodos(
+        getTodoListResponse.data.filter(
+          (listObj) =>
+            listObj.status === "TODO" &&
+            listObj.assigned_to == userDetails.username
+        )
+      );
+      setInProgres(
+        getTodoListResponse.data.filter(
+          (listObj) =>
+            listObj.status === "PROGRESS" &&
+            listObj.assigned_to == userDetails.username
+        )
+      );
+      setCompleted(
+        getTodoListResponse.data.filter(
+          (listObj) =>
+            listObj.status === "COMPLETE" &&
+            listObj.assigned_to == userDetails.username
+        )
+      );
+    }
+  }, [getTodoListResponse.data, isUserOnly]);
+
+  console.log(isUserOnly);
 
   if (!isMounted) return;
 
@@ -90,7 +116,13 @@ const ProjectDash = () => {
             </Center>
             <Center>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <MdGroups2 size={30} /> <Switch />
+                <MdGroups2 size={30} />{" "}
+                <Switch
+                  value={isUserOnly}
+                  onToggle={() => {
+                    setIsUserOnly(!isUserOnly);
+                  }}
+                />
                 <FaUserAlt />
               </div>
             </Center>

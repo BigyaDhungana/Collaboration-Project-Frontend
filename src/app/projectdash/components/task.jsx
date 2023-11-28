@@ -27,6 +27,10 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
   const [showModal, setShowModal] = useState(false);
   const { authToken, isMounted, metaData } = useLocalData();
   const [team, setTeam] = useState(null);
+  // const [colorStyles, setColorStyles] = useState();
+  // if (task.priority=="LOW"){
+  //   setColorStyles("")
+  // }
 
   // console.log(team);
 
@@ -98,11 +102,11 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
 
   return (
     <>
-      <div className="task-container">
+      <div className={`task-container ${task.priority}`}>
         <div className="task-text">
           <Text size="lg">{task.title}</Text>
           <div className="assigenedto">
-            <Text size="xs">Assigned to: {task.assigned_to}</Text>
+            <Text size="xs">{task.assigned_to}</Text>
           </div>
         </div>
 
