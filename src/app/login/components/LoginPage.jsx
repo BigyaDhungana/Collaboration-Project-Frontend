@@ -34,13 +34,9 @@ import { FiUpload } from "react-icons/fi";
 import logo from "/public/loginpc.jpg";
 import { useMutation } from "@tanstack/react-query";
 import { signupApi, loginApi } from "../../../apiFunc/users";
-// import { toast } from "react-toastify";
-import { useUserContext } from "../../../context/userContext";
 import { showToast } from "../../../utils/toasT";
-import {
-  savetoLocalStorage,
-  getfromLocalStorage,
-} from "../../../utils/localstorage";
+import { savetoLocalStorage } from "../../../utils/localstorage";
+import Loading from "../../../components/loading";
 import "../css/login.css";
 
 const Loginpage = () => {
@@ -65,7 +61,6 @@ const Loginpage = () => {
   });
   const [pppicture, setPppicture] = useState(undefined);
   const [showSignup, setShowSignup] = useState(false);
-  const { setAuthtoken, setUserDetails } = useUserContext();
 
   //api call
   const signupResponse = useMutation({
@@ -107,9 +102,7 @@ const Loginpage = () => {
         name,
         email,
       });
-      // setAuthtoken(token);
-      // setUserDetails({ username, userID, profile_picture, name, email });
-
+      showToast(`Welcome ${username}`, "success");
       router.push("/maindash");
     },
     networkMode: "always",

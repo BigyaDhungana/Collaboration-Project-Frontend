@@ -8,12 +8,13 @@ import Stable from "./components/scrolltable";
 import { useUserContext } from "../../context/userContext";
 import { useLocalData } from "../../hooks/useLocalData";
 import { dashboardApi } from "../../apiFunc/dashboard";
-import {metadataApi} from "../../apiFunc/users"
+import { metadataApi } from "../../apiFunc/users";
 import { savetoLocalStorage } from "../../utils/localstorage";
 
 //dummy
 import { news, tasks, dummyinfo, yourProjects, nws } from "../testdata/data";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/loading";
 
 const Dashboard = () => {
   const { authToken, userDetails, isMounted } = useLocalData();
@@ -25,21 +26,22 @@ const Dashboard = () => {
   });
 
   const metadataResponse = useQuery({
-    queryKey:["metadata"],
-    queryFn:()=>metadataApi(authToken),
-    enabled:isMounted,})
+    queryKey: ["metadata"],
+    queryFn: () => metadataApi(authToken),
+    enabled: isMounted,
+  });
 
-  if(metadataResponse.data){
-    savetoLocalStorage("metadata",metadataResponse.data)
+  if (metadataResponse.data) {
+    savetoLocalStorage("metadata", metadataResponse.data);
   }
 
   if (!isMounted) {
-    return;
+    return <Loading text={"Loading page ..."} size={"large"} />;
   }
-  if (dashResponse.isLoading||metadataResponse.isLoading) {
-    return <h1>loading</h1>;
+  if (dashResponse.isLoading || metadataResponse.isLoading) {
+    return <Loading text={"Please wait ..."} size={"large"} />;
   }
-  if (dashResponse.isError||metadataResponse.isError) {
+  if (dashResponse.isError || metadataResponse.isError) {
     return <h1>err</h1>;
   }
   // console.log(metadataResponse.data)

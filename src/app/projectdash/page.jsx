@@ -24,6 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTodoListApi } from "../../apiFunc/todos";
 import { MdGroups2 } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
+import Loading from "../../components/loading";
 
 const ProjectDash = () => {
   //get query param
@@ -96,7 +97,8 @@ const ProjectDash = () => {
     }
   }, [getTodoListResponse.data, isUserOnly]);
 
-  console.log(isUserOnly);
+  // if (getTodoListResponse.isLoading)
+  //   return <Loading text={"Please wait"} size={"large"} />;
 
   if (!isMounted) return;
 

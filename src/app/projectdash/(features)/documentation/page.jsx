@@ -27,8 +27,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalData } from "../../../../hooks/useLocalData";
 import { showToast } from "../../../../utils/toasT";
-//test
-const projList = ["ine", "teo", "three", "four", "five"];
+import Loading from "../../../../components/loading";
 
 const Documentation = () => {
   const queryClient = useQueryClient();
@@ -92,9 +91,7 @@ const Documentation = () => {
     setSelectedProjectId(e.target.value);
     setProjValue(e.target.value);
   };
-  if (docListResponse.isLoading) {
-    return <div>Loading...</div>;
-  }
+
   if (docListResponse.isError) {
     return <div>Error</div>;
   }
@@ -130,6 +127,7 @@ const Documentation = () => {
         </HStack>
 
         <ScrollView h="430px" m="10px">
+          {docListResponse.isLoading && <Loading size="small" />}
           {doclist.map((doc) => {
             return (
               <div

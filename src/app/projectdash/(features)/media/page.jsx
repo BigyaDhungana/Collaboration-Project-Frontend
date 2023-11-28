@@ -49,9 +49,9 @@ const Media = () => {
     },
     onSuccess: () => {
       showToast("Image added successfully", "success");
-      getmedialistResponse.refetch();
       setFile(null);
       setUpdate(!update);
+      getmedialistResponse.refetch();
     },
     onError: (error) => {
       showToast(error.message, "error");
@@ -113,6 +113,7 @@ const Media = () => {
                     <option value="none" disabled hidden>
                       Select an Option
                     </option>
+
                     {metaData.map((element) => {
                       return (
                         <option
@@ -159,7 +160,15 @@ const Media = () => {
               <ScrollView h="500px">
                 <div className="media">
                   {dataArray.map((imgObj) => {
-                    return <Mediadiv imgObj={imgObj} key={imgObj.id} func={setUpdate} query={getmedialistResponse} ivp={update}/>;
+                    return (
+                      <Mediadiv
+                        imgObj={imgObj}
+                        key={imgObj.id}
+                        func={setUpdate}
+                        query={getmedialistResponse}
+                        ivp={update}
+                      />
+                    );
                   })}
                 </div>
               </ScrollView>

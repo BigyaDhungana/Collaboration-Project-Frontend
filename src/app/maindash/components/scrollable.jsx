@@ -18,12 +18,13 @@ import {
   ModalFooter,
   HStack,
 } from "@gluestack-ui/themed";
-import { useState } from "react";
+import { use, useState } from "react";
 import { queryParamGenerator } from "../../../utils/querypara";
+import Loading from "../../../components/loading";
 
 const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
   const router = useRouter();
-
+  const [loading,setLoading]=useState(false);
   const [showNews, setShowNews] = useState(false);
   const [news, setNews] = useState({ title: "", content: "" });
 
@@ -35,6 +36,7 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
 
   const handleButton = (elementName, title = undefined, body = undefined) => {
     if (route != "none") {
+      setLoading(true);
       router.push(route + "?" + queryParamGenerator("pid", elementName));
     } else {
       // console.log(`not defined for news and notices btw ${elementName}`);
@@ -46,6 +48,9 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
     }
   };
   // console.log(list);
+  // if (loading){
+  //   return <Loading text={"Please wait ..."} size={"large"} />;
+  // }
   return (
     <GluestackUIProvider config={config}>
       <Box borderWidth="0.5px" ml="5px" mr="5px" mt="30px" p="5px">

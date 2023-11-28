@@ -11,6 +11,7 @@ import {
 import { config } from "../../../../config/gluestack-ui.config";
 
 import Task from "./task";
+import Loading from "../../../components/loading";
 
 const Scrollbox = ({
   title,
@@ -21,6 +22,7 @@ const Scrollbox = ({
   setReload,
   teamId,
 }) => {
+ 
   return (
     <GluestackUIProvider config={config}>
       <Box borderWidth="0.5px" m="15px" p="5px" w="380px" ml="5px">
@@ -31,6 +33,7 @@ const Scrollbox = ({
           </HStack>
         </Center>
         <ScrollView h="390px" p="10px" pt="0px">
+          {refetchFunc.isLoading && <Loading size="small"/>}
           {list.map((element) => {
             return (
               <Task
