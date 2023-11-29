@@ -147,7 +147,7 @@ const Media = () => {
                         </>
                       ) : (
                         <>
-                          <FiUpload /> "Click here to upload image"
+                          <FiUpload /> {"Click here to upload image"}
                         </>
                       )}
                     </label>

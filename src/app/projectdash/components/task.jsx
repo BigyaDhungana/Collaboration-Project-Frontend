@@ -25,8 +25,8 @@ import { MdOutlineDelete } from "react-icons/md";
 
 const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
   const [showModal, setShowModal] = useState(false);
-  const { authToken, isMounted, metaData } = useLocalData();
-  const [team, setTeam] = useState(null);
+  const { authToken, isMounted, userDetails } = useLocalData();
+  // const [isLead, setisLead] = useState(true);
   // const [colorStyles, setColorStyles] = useState();
   // if (task.priority=="LOW"){
   //   setColorStyles("")
@@ -62,15 +62,11 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
     },
   });
 
-  useEffect(() => {
-    if (isMounted) {
-      const projectTeams = metaData.find(
-        (dataObj) => dataObj.project_id == task.project_id
-      );
-      const teams = projectTeams.teams.find((teamObj) => teamObj.id == teamId);
-      setTeam(teams);
-    }
-  }, [teamId]);
+  // if (isMounted) {
+  //   if (userDetails.username == task.assigned_by) {
+  //     // setisLead(true);
+  //   }
+  // }
 
   const buttonState = {
     todo: taskType === "TODO",
@@ -99,6 +95,8 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
   if (!isMounted) {
     return null;
   }
+
+  if (task == null) return null;
 
   return (
     <>
@@ -187,15 +185,13 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
           <Center>
             <ModalHeader>{task.title}</ModalHeader>
             <div className="del">
-              <Button
-                action="negative"
-                isDisabled={!(team?.isLead || true)}
-                onPress={handleDelete}
-              >
-                <ButtonIcon>
-                  <MdOutlineDelete size={20} />
-                </ButtonIcon>
-              </Button>
+              {userDetails.username == task.assigned_by && (
+                <Button action="negative" onPress={handleDelete}>
+                  <ButtonIcon>
+                    <MdOutlineDelete size={20} />
+                  </ButtonIcon>
+                </Button>
+              )}
             </div>
           </Center>
           <ModalBody>{task.body}</ModalBody>
