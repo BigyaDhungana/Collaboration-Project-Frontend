@@ -26,6 +26,7 @@ import { MdGroups2 } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import Loading from "../../components/loading";
 import { showToast } from "../../utils/toasT";
+import Error from "../../components/error";
 
 const ProjectDash = () => {
   const router = useRouter();
