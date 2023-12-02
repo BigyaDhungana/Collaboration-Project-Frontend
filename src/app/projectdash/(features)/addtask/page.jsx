@@ -104,6 +104,17 @@ const Addtask = () => {
       assigned_to: selectDetails.empName,
     };
     // console.log(data);
+    if (
+      data.assigned_to == "none" ||
+      data.title == "" ||
+      data.body == "" ||
+      data.priority == "none" ||
+      data.team == "none"
+    ) {
+      showToast("Fill all the fields", "error");
+      return;
+    }
+
     addtaskResponse.mutate(data);
   };
 
@@ -134,6 +145,7 @@ const Addtask = () => {
                     <Input size="lg">
                       <InputField
                         placeholder="Enter Task Title"
+                        value={details.taskTitle}
                         onChange={(e) =>
                           setDetails({ ...details, taskTitle: e.target.value })
                         }
@@ -145,6 +157,7 @@ const Addtask = () => {
                         onChange={(e) =>
                           setDetails({ ...details, taskDesc: e.target.value })
                         }
+                        value={details.taskDesc}
                       ></TextareaInput>
                     </Textarea>
                     <VStack>
@@ -180,33 +193,6 @@ const Addtask = () => {
                     </VStack>
                     <HStack space="4xl">
                       <VStack>
-                        <Text size="lg">Employee Name</Text>
-                        <select
-                          name="employeeName"
-                          id="ename"
-                          className="selectlist"
-                          onChange={(e) => {
-                            setSelectdetails({
-                              ...selectDetails,
-                              empName: e.target.value,
-                            });
-                            setEmpValue(e.target.value);
-                          }}
-                          value={empValue}
-                        >
-                          <option value="none" disabled hidden>
-                            Select an Option
-                          </option>
-                          {employeeList.map((empObj) => {
-                            return (
-                              <option value={empObj.name} key={empObj.id}>
-                                {empObj.username}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </VStack>
-                      <VStack>
                         <Text size="lg">Team Name</Text>
                         <select
                           name="teamName"
@@ -233,6 +219,33 @@ const Addtask = () => {
                                 disabled={!element.isLead}
                               >
                                 {element.name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </VStack>
+                      <VStack>
+                        <Text size="lg">Employee Name</Text>
+                        <select
+                          name="employeeName"
+                          id="ename"
+                          className="selectlist"
+                          onChange={(e) => {
+                            setSelectdetails({
+                              ...selectDetails,
+                              empName: e.target.value,
+                            });
+                            setEmpValue(e.target.value);
+                          }}
+                          value={empValue}
+                        >
+                          <option value="none" disabled hidden>
+                            Select an Option
+                          </option>
+                          {employeeList.map((empObj) => {
+                            return (
+                              <option value={empObj.name} key={empObj.id}>
+                                {empObj.username}
                               </option>
                             );
                           })}

@@ -1,11 +1,14 @@
 import axios from "axios";
 
-// const url = "http://192.168.18.135:8000/";
 const url = `${process.env.NEXT_PUBLIC_API_URL}/users/`;
 
 export const signupApi = async (data) => {
-  const response = await axios.post(`${url}register/`, data);
-  return response;
+  try {
+    const response = await axios.post(`${url}register/`, data);
+    return response;
+  } catch (error) {
+    return Promise.reject(new Error(error.response.data.error))
+  }
 };
 
 export const loginApi = async (data) => {

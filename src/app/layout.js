@@ -9,7 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "TaskSphere",
+  title: {
+    default:"TaskSphere",
+    template:"%s | TaskSphere"
+  },
   description: "Collaborative platform",
 };
 

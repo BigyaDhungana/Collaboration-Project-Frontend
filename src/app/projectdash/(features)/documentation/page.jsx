@@ -28,6 +28,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalData } from "../../../../hooks/useLocalData";
 import { showToast } from "../../../../utils/toasT";
 import Loading from "../../../../components/loading";
+import Error from "../../../../components/error";
 
 const Documentation = () => {
   const queryClient = useQueryClient();
@@ -93,10 +94,15 @@ const Documentation = () => {
   };
 
   if (docListResponse.isLoading) {
-    return <div>Loading...</div>;
+    return <Loading text="Loading" size="large"></Loading>;
   }
   if (docListResponse.isError) {
-    return <div>Error</div>;
+    if (docListResponse.error.message == "401") {
+      showToast("user token expired", "error");
+      router.replace("/");
+      return <Loading text={"Please wait ..."} size={"large"} />;
+    }
+    return <Error status={docListResponse.error.message} />;
   }
   if (!isMounted) {
     return;
