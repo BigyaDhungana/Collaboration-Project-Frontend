@@ -1,6 +1,6 @@
 import Profile from "./profile";
 import Image from "next/image";
-import logo from "/public/logo.svg";
+import logo from "/public/tasksphere.png";
 const Headerbar = (props) => {
 
   
@@ -15,8 +15,8 @@ const Headerbar = (props) => {
           marginRight:15
         }}
       >
-        <div>
-          <Image src={logo} alt="pc" />
+        <div style={{marginLeft:"3px"}}>
+          <Image src={logo} alt="pc" width={180}/>
         </div>
         <div>
           <Profile />

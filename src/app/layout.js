@@ -9,12 +9,14 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: {
-    default:"TaskSphere",
-    template:"%s | TaskSphere"
-  },
+  title: "TaskSphere",
   description: "Collaborative platform",
+  icons: {
+    icon: "public/favicon.svg", 
+  },
 };
+
+
 
 export default function RootLayout({ children }) {
   return (
