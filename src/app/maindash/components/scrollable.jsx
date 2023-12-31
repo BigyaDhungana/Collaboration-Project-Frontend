@@ -58,7 +58,7 @@ const Scrollable = ({ title, list, sWidth = "61.25rem", route = "none" }) => {
           <Heading mb="5px">{title}</Heading>
         </Center>
 
-        <ScrollView h="220px" w={sWidth}>
+        <ScrollView h="210px" w={sWidth}>
           {list.map((element) => {
             if (title == "Your Projects") {
               return (

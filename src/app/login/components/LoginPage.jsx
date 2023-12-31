@@ -31,7 +31,8 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
-import logo from "/public/loginpc.jpg";
+import logo from "/public/phlder.jpg";
+import mlogo from "/public/tasksphere.png";
 import { useMutation } from "@tanstack/react-query";
 import { signupApi, loginApi } from "../../../apiFunc/users";
 import { showToast } from "../../../utils/toasT";
@@ -152,14 +153,17 @@ const Loginpage = () => {
   return (
     <>
       <GluestackUIProvider config={config}>
-        <Box bg="$clr3" h="740px" justifyContent="center" alignItems="center">
+        <Box bg="$clr3" h="715px" justifyContent="center" alignItems="center">
           <Box h="55%" w="50%" rounded="5px">
             <HStack>
               <Box bg="$clr2" h="100%" width="50%" aligntext="center">
                 <Box pt="36px">
-                  <Heading mr="auto" ml="auto">
+                  {/* <Heading mr="auto" ml="auto">
                     Welcome
-                  </Heading>
+                  </Heading> */}
+                  <Center>
+                    <Image src={mlogo} alt="pc" width={200} />
+                  </Center>
                 </Box>
                 <Box>
                   <Box

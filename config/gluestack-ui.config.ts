@@ -27,9 +27,9 @@ export const gluestackUIConfig = createConfig({
   } as const,
   tokens: {
     colors: {
-      clr1 : "#8FCB9B",
-      clr2 : "#E8E9DC",
-      clr3 : "#788051",
+      clr1: "#8FCB9B",
+      clr2: "#FFFFFF",
+      clr3: "#89CFF0",
       rose50: "#fff1f2",
       rose100: "#ffe4e6",
       rose200: "#fecdd3",

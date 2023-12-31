@@ -11,9 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "TaskSphere",
   description: "Collaborative platform",
-  icons: {
-    icon: "public/favicon.svg", 
-  },
+
 };
 
 

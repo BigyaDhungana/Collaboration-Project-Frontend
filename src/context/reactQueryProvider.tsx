@@ -16,7 +16,7 @@ function Reactqueryprovider({ children }: any) {
     <>
       <QueryClientProvider client={client}>
         <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </>
   );

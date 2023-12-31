@@ -32,7 +32,7 @@ const Scrollbox = ({
             <Heading>{children}</Heading>
           </HStack>
         </Center>
-        <ScrollView h="390px" p="10px" pt="0px">
+        <ScrollView h="383px" p="10px" pt="0px">
           {refetchFunc.isLoading && <Loading size="small"/>}
           {list.map((element) => {
             return (

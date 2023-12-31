@@ -104,7 +104,7 @@ const Task = ({ task, taskType, refetchFunc, reload, setReload, teamId }) => {
         <div className="task-text">
           <Text size="lg">{task.title}</Text>
           <div className="assigenedto">
-            <Text size="xs">{task.assigned_to}</Text>
+            <Text size="xs" bold={true}>{task.assigned_to}</Text>
           </div>
         </div>
 

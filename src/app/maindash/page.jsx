@@ -77,7 +77,7 @@ const Dashboard = () => {
         <Scrollable
           title="Your Projects"
           list={metadataResponse.data}
-          sWidth={"25rem"}
+          sWidth={"24rem"}
           route="/projectdash"
         />
         <VStack>
